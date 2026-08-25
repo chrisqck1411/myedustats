@@ -253,6 +253,53 @@
             margin: 0 0 26px;
         }
 
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 20px 0 0;
+        }
+
+        .metric {
+            background: var(--accent-50);
+            border: 1px solid var(--accent-200);
+            border-radius: 6px;
+            padding: 14px 16px;
+        }
+
+        .metric .lbl {
+            font-size: 12px;
+            color: var(--accent-700);
+            margin: 0 0 8px;
+            font-weight: 500;
+        }
+
+        .metric .row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding: 3px 0;
+        }
+
+        .metric .who {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10.5px;
+            color: var(--ink-soft);
+        }
+
+        .metric .val {
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            font-size: 20px;
+            color: var(--accent-900);
+        }
+
+        .metric .val.dim {
+            color: var(--ink-soft);
+            font-size: 16px;
+            font-weight: 400;
+        }
+
         /* Responsive Mobile Adjustments */
         @media (max-width:768px) {
             .tabbar {
@@ -353,6 +400,24 @@
                 <p class="cat-eyebrow">File 01 · Access &amp; enrollment</p>
                 <h2 class="cat-title" id="display-title">National Overview</h2>
                 <p class="cat-desc" id="api-status">Fetching data from OpenDOSM...</p>
+                <div class="metrics" id="metrics-grid">
+                    <div class="metric">
+                        <p class="lbl">Primary students</p>
+                        <div class="row"><span class="who" id="state-label-1">—</span><span class="val"
+                                id="primary-state">—</span></div>
+                        <div class="row" id="primary-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim" id="primary-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Secondary students</p>
+                        <div class="row"><span class="who" id="state-label-2">—</span><span class="val"
+                                id="secondary-state">—</span></div>
+                        <div class="row" id="secondary-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim" id="secondary-national">—</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- File 02 Placeholder -->
@@ -379,43 +444,87 @@
             });
         });
 
-        // 2. Context Bar Logic
+        // 2. Data layer
+        let enrolmentData = [];
+
+        async function loadEnrolmentData() {
+            const statusText = document.getElementById('api-status');
+            const url = 'https://api.data.gov.my/data-catalogue?id=enrolment_school_district';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok, status ' + response.status);
+                const rawData = await response.json();
+                console.log('Total rows received:', rawData.length);
+                console.log('Sample row:', rawData[0]);
+                enrolmentData = rawData.filter(r => r.district === 'All Districts' && r.sex === 'both');
+                console.log('Rows after filtering to state-level totals:', enrolmentData.length);
+                statusText.textContent = 'Data current as of ' + latestDateLabel();
+                renderMetrics();
+            } catch (error) {
+                console.error('Fetch error:', error);
+                statusText.textContent = 'Could not load enrollment data: ' + error.message;
+            }
+        }
+
+        function latestDateLabel() {
+            const dates = enrolmentData.map(r => r.date).sort();
+            return dates.length ? dates[dates.length - 1] : 'unknown';
+        }
+
+        function latestFor(stateName, stage) {
+            const rows = enrolmentData.filter(r => r.state === stateName && r.stage === stage);
+            if (!rows.length) return null;
+            return rows.reduce((a, b) => (a.date > b.date ? a : b));
+        }
+
+        function formatNum(n) {
+            return n == null ? '—' : n.toLocaleString('en-MY');
+        }
+
+        // 3. Render metric cards for the currently selected state
+        function renderMetrics() {
+            const selectedState = document.getElementById('state-selector').value;
+            const compareOn = document.getElementById('compare-toggle').checked;
+
+            const primaryState = latestFor(selectedState, 'primary');
+            const secondaryState = latestFor(selectedState, 'secondary');
+
+            document.getElementById('state-label-1').textContent = selectedState;
+            document.getElementById('state-label-2').textContent = selectedState;
+            document.getElementById('primary-state').textContent = formatNum(primaryState?.students);
+            document.getElementById('secondary-state').textContent = formatNum(secondaryState?.students);
+
+            const showCompare = compareOn && selectedState !== 'Malaysia';
+            document.getElementById('primary-national-row').style.display = showCompare ? 'flex' : 'none';
+            document.getElementById('secondary-national-row').style.display = showCompare ? 'flex' : 'none';
+
+            if (showCompare) {
+                document.getElementById('primary-national').textContent = formatNum(latestFor('Malaysia', 'primary')?.students);
+                document.getElementById('secondary-national').textContent = formatNum(latestFor('Malaysia', 'secondary')?.students);
+            }
+        }
+
+        // 4. Context bar wiring
         const stateSelector = document.getElementById('state-selector');
         const compareToggleContainer = document.getElementById('compare-toggle-container');
+        const compareToggle = document.getElementById('compare-toggle');
         const displayTitle = document.getElementById('display-title');
 
         stateSelector.addEventListener('change', (e) => {
             const selectedState = e.target.value;
             if (selectedState === 'Malaysia') {
                 compareToggleContainer.style.display = 'none';
-                displayTitle.innerText = "National Overview";
+                displayTitle.innerText = 'National Overview';
             } else {
                 compareToggleContainer.style.display = 'inline-flex';
                 displayTitle.innerText = `${selectedState} Enrollment`;
             }
+            renderMetrics();
         });
 
-        // 3. OpenDOSM API Fetch Logic (Testing CORS)
-        async function testOpenDOSMApi() {
-            const apiUrl = 'https://api.data.gov.my/data-catalogue?id=enrolment_school_district';
-            const statusText = document.getElementById('api-status');
+        compareToggle.addEventListener('change', renderMetrics);
 
-            try {
-                const response = await fetch(apiUrl);
-                if (!response.ok) throw new Error("Network response was not ok");
-
-                const data = await response.json();
-                console.log("Success! OpenDOSM Data Fetched:", data);
-                statusText.innerHTML = `✅ Successfully connected to OpenDOSM API! Check your browser console to view the incoming records.`;
-
-            } catch (error) {
-                console.error("Fetch error:", error);
-                statusText.innerHTML = `❌ Failed to connect to API: ${error.message}. Check browser console.`;
-            }
-        }
-
-        // Run API test when page loads
-        testOpenDOSMApi();
+        loadEnrolmentData();
     </script>
 
 </body>
