@@ -300,6 +300,47 @@
             font-weight: 400;
         }
 
+        .state-table-wrap {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .state-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13.5px;
+        }
+
+        .state-table th {
+            text-align: left;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10.5px;
+            letter-spacing: .08em;
+            color: var(--ink-soft);
+            font-weight: 500;
+            padding: 0 10px 8px 0;
+            border-bottom: 1.5px solid var(--accent-500);
+        }
+
+        .state-table td {
+            padding: 9px 10px 9px 0;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .state-table td.num {
+            font-family: 'IBM Plex Mono', monospace;
+            text-align: right;
+        }
+
+        .state-table tr.region-header td {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10.5px;
+            letter-spacing: .1em;
+            color: var(--accent-700);
+            background: var(--accent-50);
+            padding-top: 12px;
+        }
+
         /* Responsive Mobile Adjustments */
         @media (max-width:768px) {
             .tabbar {
@@ -361,6 +402,7 @@
         <div class="context-bar">
             <select id="state-selector">
                 <option value="Malaysia">Malaysia (National Overview)</option>
+                <option value="All States">All States (compare)</option>
                 <option value="Johor">Johor</option>
                 <option value="Kedah">Kedah</option>
                 <option value="Kelantan">Kelantan</option>
@@ -384,6 +426,16 @@
                 <span class="slider"></span>
                 Compare with National Average
             </label>
+
+            <div class="toggle-container" id="sort-control-container" style="display:none; gap:12px;">
+                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                    <input type="radio" name="sort-mode" value="alpha" checked> Alphabetical
+                </label>
+                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                    <input type="radio" name="sort-mode" value="region"> By region
+                </label>
+            </div>
+
         </div>
 
         <div class="tabbar" id="tabbar">
@@ -417,6 +469,19 @@
                             <span class="who">Malaysia</span><span class="val dim" id="secondary-national">—</span>
                         </div>
                     </div>
+                </div>
+                <div class="state-table-wrap" id="state-table-wrap" style="display:none;">
+                    <table class="state-table" id="state-table">
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>Region</th>
+                                <th>Primary students</th>
+                                <th>Secondary students</th>
+                            </tr>
+                        </thead>
+                        <tbody id="state-table-body"></tbody>
+                    </table>
                 </div>
             </div>
 
@@ -482,10 +547,40 @@
         }
 
         // 3. Render metric cards for the currently selected state
+        const STATE_REGIONS = {
+            'Perlis': 'Northern',
+            'Kedah': 'Northern',
+            'Pulau Pinang': 'Northern',
+            'Perak': 'Northern',
+            'Selangor': 'Central',
+            'W.P. Kuala Lumpur': 'Central',
+            'W.P. Putrajaya': 'Central',
+            'Negeri Sembilan': 'Central',
+            'Melaka': 'Southern',
+            'Johor': 'Southern',
+            'Pahang': 'East Coast',
+            'Terengganu': 'East Coast',
+            'Kelantan': 'East Coast',
+            'Sabah': 'East Malaysia',
+            'Sarawak': 'East Malaysia',
+            'W.P. Labuan': 'East Malaysia'
+        };
+        const REGION_ORDER = ['Northern', 'Central', 'Southern', 'East Coast', 'East Malaysia'];
+
         function renderMetrics() {
             const selectedState = document.getElementById('state-selector').value;
-            const compareOn = document.getElementById('compare-toggle').checked;
 
+            if (selectedState === 'All States') {
+                document.getElementById('metrics-grid').style.display = 'none';
+                document.getElementById('state-table-wrap').style.display = 'block';
+                renderAllStatesTable();
+                return;
+            }
+
+            document.getElementById('metrics-grid').style.display = 'grid';
+            document.getElementById('state-table-wrap').style.display = 'none';
+
+            const compareOn = document.getElementById('compare-toggle').checked;
             const primaryState = latestFor(selectedState, 'primary');
             const secondaryState = latestFor(selectedState, 'secondary');
 
@@ -504,7 +599,44 @@
             }
         }
 
-        // 4. Context bar wiring
+        function renderAllStatesTable() {
+            const sortMode = document.querySelector('input[name="sort-mode"]:checked').value;
+            const tbody = document.getElementById('state-table-body');
+            tbody.innerHTML = '';
+
+            const states = Object.keys(STATE_REGIONS);
+
+            if (sortMode === 'alpha') {
+                states.sort((a, b) => a.localeCompare(b));
+                states.forEach(state => tbody.appendChild(buildStateRow(state)));
+            } else {
+                REGION_ORDER.forEach(region => {
+                    const headerRow = document.createElement('tr');
+                    headerRow.className = 'region-header';
+                    headerRow.innerHTML = `<td colspan="4">${region}</td>`;
+                    tbody.appendChild(headerRow);
+
+                    states
+                        .filter(s => STATE_REGIONS[s] === region)
+                        .sort((a, b) => a.localeCompare(b))
+                        .forEach(state => tbody.appendChild(buildStateRow(state)));
+                });
+            }
+        }
+
+        function buildStateRow(state) {
+            const primary = latestFor(state, 'primary');
+            const secondary = latestFor(state, 'secondary');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+           <td>${state}</td>
+           <td>${STATE_REGIONS[state]}</td>
+           <td class="num">${formatNum(primary?.students)}</td>
+           <td class="num">${formatNum(secondary?.students)}</td>
+       `;
+            return tr;
+        }
+
         const stateSelector = document.getElementById('state-selector');
         const compareToggleContainer = document.getElementById('compare-toggle-container');
         const compareToggle = document.getElementById('compare-toggle');
@@ -512,15 +644,28 @@
 
         stateSelector.addEventListener('change', (e) => {
             const selectedState = e.target.value;
+            const sortControlContainer = document.getElementById('sort-control-container');
+
             if (selectedState === 'Malaysia') {
                 compareToggleContainer.style.display = 'none';
+                sortControlContainer.style.display = 'none';
                 displayTitle.innerText = 'National Overview';
+            } else if (selectedState === 'All States') {
+                compareToggleContainer.style.display = 'none';
+                sortControlContainer.style.display = 'flex';
+                displayTitle.innerText = 'All States Overview';
             } else {
                 compareToggleContainer.style.display = 'inline-flex';
+                sortControlContainer.style.display = 'none';
                 displayTitle.innerText = `${selectedState} Enrollment`;
             }
             renderMetrics();
         });
+
+        document.querySelectorAll('input[name="sort-mode"]').forEach(radio => {
+            radio.addEventListener('change', renderMetrics);
+        });
+
 
         compareToggle.addEventListener('change', renderMetrics);
 
