@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyEduStats</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --paper: #F7F2E4;
+            --paper-edge: #E7DEC4;
+            --deskbg: #D8CBA6;
+            --ink: #2B2620;
+            --ink-soft: #6B6252;
+            --rule: #C9BC98;
+            --blue-50: #E6F1FB;
+            --blue-200: #85B7EB;
+            --blue-500: #2C6CA8;
+            --blue-700: #154572;
+            --blue-900: #0C2C48;
+            --green-50: #EAF3DE;
+            --green-200: #9BC57C;
+            --green-500: #4B7F3C;
+            --green-700: #2D5324;
+            --green-900: #1B3315;
+            --accent-50: var(--blue-50);
+            --accent-200: var(--blue-200);
+            --accent-500: var(--blue-500);
+            --accent-700: var(--blue-700);
+            --accent-900: var(--blue-900);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--deskbg);
+            background-image: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 3px);
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
+            padding: 48px 24px 80px;
+        }
+
+        .wrap {
+            max-width: 1040px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .eyebrow {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            letter-spacing: .12em;
+            color: var(--ink-soft);
+            margin: 0 0 6px 2px;
+        }
+
+        h1.title {
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            font-size: 38px;
+            line-height: 1.1;
+            margin: 0 0 22px 2px;
+        }
+
+        h1.title span {
+            color: var(--accent-700);
+        }
+
+        /* New Context Bar Styles */
+        .context-bar {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin: 0 0 32px 2px;
+            flex-wrap: wrap;
+        }
+
+        .context-bar select {
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 1px solid var(--rule);
+            background: var(--paper);
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--ink);
+            cursor: pointer;
+        }
+
+        .toggle-container {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            color: var(--ink-soft);
+            cursor: pointer;
+        }
+
+        .toggle-container input {
+            display: none;
+        }
+
+        .slider {
+            width: 36px;
+            height: 20px;
+            background-color: var(--rule);
+            border-radius: 20px;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: white;
+            top: 3px;
+            left: 3px;
+            transition: 0.3s;
+        }
+
+        .toggle-container input:checked+.slider {
+            background-color: var(--accent-700);
+        }
+
+        .toggle-container input:checked+.slider::before {
+            transform: translateX(16px);
+        }
+
+        /* Rounded Tabs Layout */
+        .tabbar {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            padding-left: 4px;
+        }
+
+        .tab {
+            font-family: 'Fraunces', serif;
+            font-weight: 500;
+            font-size: 14.5px;
+            line-height: 1.25;
+            color: var(--paper);
+            background: var(--accent-700);
+            border: none;
+            padding: 13px 18px 11px;
+            border-radius: 8px 8px 0 0;
+            /* Rounded top corners applied */
+            cursor: pointer;
+            position: relative;
+            top: 6px;
+            transition: top .15s ease, background .15s ease;
+            text-align: left;
+            max-width: 150px;
+            flex: 1;
+        }
+
+        .tab .num {
+            display: block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10.5px;
+            letter-spacing: .1em;
+            opacity: .75;
+            margin-bottom: 3px;
+        }
+
+        .tab:hover {
+            top: 2px;
+        }
+
+        .tab.active {
+            background: var(--accent-50);
+            color: var(--accent-900);
+            top: 0;
+            font-weight: 600;
+            z-index: 5;
+        }
+
+        .tab.active .num {
+            opacity: .6;
+            color: var(--accent-700);
+        }
+
+        .folder {
+            background: var(--paper);
+            border: 1px solid var(--rule);
+            border-radius: 2px;
+            box-shadow: 0 1px 0 var(--paper-edge), 3px 5px 0 -1px var(--paper-edge), 6px 10px 0 -2px #ded1ab, 0 18px 28px -14px rgba(43, 38, 32, .35);
+            position: relative;
+            z-index: 2;
+        }
+
+        .sheet {
+            padding: 34px 40px 30px;
+            display: none;
+        }
+
+        .sheet.active {
+            display: block;
+        }
+
+        .stamp {
+            float: right;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10.5px;
+            letter-spacing: .06em;
+            color: var(--accent-700);
+            border: 1.5px solid var(--accent-700);
+            border-radius: 50%;
+            width: 104px;
+            height: 104px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transform: rotate(-9deg);
+            margin: -6px -4px 10px 16px;
+            opacity: .8;
+        }
+
+        .cat-eyebrow {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11.5px;
+            letter-spacing: .12em;
+            color: var(--accent-700);
+            margin: 0 0 4px;
+        }
+
+        h2.cat-title {
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            font-size: 27px;
+            margin: 0 0 8px;
+            color: var(--ink);
+        }
+
+        .cat-desc {
+            font-size: 14.5px;
+            color: var(--ink-soft);
+            max-width: 520px;
+            line-height: 1.55;
+            margin: 0 0 26px;
+        }
+
+        /* Responsive Mobile Adjustments */
+        @media (max-width:768px) {
+            .tabbar {
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+
+            .tab {
+                max-width: none;
+                flex: 1 1 30%;
+                font-size: 13px;
+                padding: 10px 12px;
+            }
+
+            .sheet {
+                padding: 24px 20px;
+            }
+
+            .stamp {
+                float: none;
+                margin: 0 0 16px;
+            }
+
+            .context-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .context-bar select {
+                width: 100%;
+            }
+        }
+
+        .theme-blue {
+            --accent-50: var(--blue-50);
+            --accent-200: var(--blue-200);
+            --accent-500: var(--blue-500);
+            --accent-700: var(--blue-700);
+            --accent-900: var(--blue-900);
+        }
+
+        .theme-green {
+            --accent-50: var(--green-50);
+            --accent-200: var(--green-200);
+            --accent-500: var(--green-500);
+            --accent-700: var(--green-700);
+            --accent-900: var(--green-900);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="wrap">
+        <p class="eyebrow">A public reference file — no login, no paywall</p>
+        <h1 class="title">MyEdu<span>Stats</span></h1>
+
+        <!-- Context Bar for State/National Selection -->
+        <div class="context-bar">
+            <select id="state-selector">
+                <option value="Malaysia">Malaysia (National Overview)</option>
+                <option value="Johor">Johor</option>
+                <option value="Kedah">Kedah</option>
+                <option value="Kelantan">Kelantan</option>
+                <option value="Melaka">Melaka</option>
+                <option value="Negeri Sembilan">Negeri Sembilan</option>
+                <option value="Pahang">Pahang</option>
+                <option value="Perak">Perak</option>
+                <option value="Perlis">Perlis</option>
+                <option value="Pulau Pinang">Pulau Pinang</option>
+                <option value="Sabah">Sabah</option>
+                <option value="Sarawak">Sarawak</option>
+                <option value="Selangor">Selangor</option>
+                <option value="Terengganu">Terengganu</option>
+                <option value="W.P. Kuala Lumpur">W.P. Kuala Lumpur</option>
+                <option value="W.P. Labuan">W.P. Labuan</option>
+                <option value="W.P. Putrajaya">W.P. Putrajaya</option>
+            </select>
+
+            <label class="toggle-container" id="compare-toggle-container">
+                <input type="checkbox" id="compare-toggle">
+                <span class="slider"></span>
+                Compare with National Average
+            </label>
+        </div>
+
+        <div class="tabbar" id="tabbar">
+            <button class="tab active" data-theme="theme-blue" data-panel="p1"><span class="num">FILE 01</span>Access
+                &amp; enrollment</button>
+            <button class="tab" data-theme="theme-green" data-panel="p2"><span class="num">FILE 02</span>Outcomes &amp;
+                attainment</button>
+        </div>
+
+        <div class="folder theme-blue" id="folder">
+            <!-- File 01: Access & Enrollment -->
+            <div class="sheet active" id="p1">
+                <div class="stamp"><span><b>OPEN DATA</b><br>API Testing</span></div>
+                <p class="cat-eyebrow">File 01 · Access &amp; enrollment</p>
+                <h2 class="cat-title" id="display-title">National Overview</h2>
+                <p class="cat-desc" id="api-status">Fetching data from OpenDOSM...</p>
+            </div>
+
+            <!-- File 02 Placeholder -->
+            <div class="sheet" id="p2">
+                <p class="cat-eyebrow">File 02 · Outcomes</p>
+                <h2 class="cat-title">Work in progress</h2>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Tab Navigation Logic
+        const tabs = document.querySelectorAll('.tab');
+        const sheets = document.querySelectorAll('.sheet');
+        const folder = document.getElementById('folder');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                sheets.forEach(s => s.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.panel).classList.add('active');
+                folder.className = 'folder ' + tab.dataset.theme;
+            });
+        });
+
+        // 2. Context Bar Logic
+        const stateSelector = document.getElementById('state-selector');
+        const compareToggleContainer = document.getElementById('compare-toggle-container');
+        const displayTitle = document.getElementById('display-title');
+
+        stateSelector.addEventListener('change', (e) => {
+            const selectedState = e.target.value;
+            if (selectedState === 'Malaysia') {
+                compareToggleContainer.style.display = 'none';
+                displayTitle.innerText = "National Overview";
+            } else {
+                compareToggleContainer.style.display = 'inline-flex';
+                displayTitle.innerText = `${selectedState} Enrollment`;
+            }
+        });
+
+        // 3. OpenDOSM API Fetch Logic (Testing CORS)
+        async function testOpenDOSMApi() {
+            const apiUrl = 'https://api.data.gov.my/opendosm?id=enrolment_school_district';
+            const statusText = document.getElementById('api-status');
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error("Network response was not ok");
+
+                const data = await response.json();
+                console.log("Success! OpenDOSM Data Fetched:", data);
+                statusText.innerHTML = `✅ Successfully connected to OpenDOSM API! Check your browser console to view the incoming records.`;
+
+            } catch (error) {
+                console.error("Fetch error:", error);
+                statusText.innerHTML = `❌ Failed to connect to API: ${error.message}. Check browser console.`;
+            }
+        }
+
+        // Run API test when page loads
+        testOpenDOSMApi();
+    </script>
+
+</body>
+
+</html>
