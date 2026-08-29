@@ -44,6 +44,11 @@
             --gold-500: #B8952E;
             --gold-700: #8A6E1B;
             --gold-900: #5C4A0F;
+            --teal-50: #E1F1EF;
+            --teal-200: #7FC4BC;
+            --teal-500: #2E8577;
+            --teal-700: #1D5C51;
+            --teal-900: #123B34;
             --accent-50: var(--blue-50);
             --accent-200: var(--blue-200);
             --accent-500: var(--blue-500);
@@ -458,6 +463,36 @@
             color: var(--ink);
         }
 
+        .report-narrative {
+            font-size: 15.5px;
+            line-height: 1.7;
+            color: var(--ink);
+            background: var(--accent-50);
+            border: 1px solid var(--accent-200);
+            border-radius: 8px;
+            padding: 20px 22px;
+            margin: 20px 0 26px;
+        }
+
+        .metric.clickable {
+            cursor: pointer;
+            transition: box-shadow .15s ease, transform .15s ease;
+        }
+
+        .metric.clickable:hover {
+            box-shadow: 0 4px 12px rgba(43, 38, 32, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .metric .view-link {
+            display: block;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            letter-spacing: .06em;
+            color: var(--accent-700);
+            margin-top: 8px;
+        }
+
         .cat-source {
             font-family: 'IBM Plex Mono', monospace;
             font-size: 11.5px;
@@ -667,6 +702,14 @@
             --accent-700: var(--gold-700);
             --accent-900: var(--gold-900);
         }
+
+        .theme-teal {
+            --accent-50: var(--teal-50);
+            --accent-200: var(--teal-200);
+            --accent-500: var(--teal-500);
+            --accent-700: var(--teal-700);
+            --accent-900: var(--teal-900);
+        }
     </style>
 </head>
 
@@ -712,7 +755,10 @@
             </div>
 
             <div class="tabbar" id="tabbar">
-                <button class="tab theme-blue active" data-theme="theme-blue" data-panel="p1">
+                <button class="tab theme-teal active" data-theme="theme-teal" data-panel="p0">
+                    <span class="num">FILE 00</span>Overview report
+                </button>
+                <button class="tab theme-blue" data-theme="theme-blue" data-panel="p1">
                     <span class="num">FILE 01</span>Access &amp; enrollment
                 </button>
                 <button class="tab theme-green" data-theme="theme-green" data-panel="p2">
@@ -730,9 +776,75 @@
             </div>
         </div>
 
-        <div class="folder theme-blue" id="folder">
+        <div class="folder theme-teal" id="folder">
+            <!-- File 00: Overview Report -->
+            <div class="sheet active" id="p0">
+                <div class="stamp">
+                    <span class="stamp-inner">
+                        <span class="stamp-top">BETA</span>
+                        <span class="stamp-divider"></span>
+                        <span class="stamp-bottom">TESTING<br>IN PROGRESS</span>
+                    </span>
+                </div>
+                <p class="cat-eyebrow">File 00 · Overview report</p>
+                <h2 class="cat-title" id="report-title">State Report</h2>
+                <div class="cat-info">
+                    <p class="info-label">About this report</p>
+                    <p>This automatically combines one headline figure from each of the other five files into a
+                        single snapshot for whichever state you select above.</p>
+
+                    <div class="cat-caveat">
+                        <p class="cat-caveat-label"><span class="cat-caveat-icon">⚠️</span> Caveat</p>
+                        <ol>
+                            <li><span class="cat-caveat-text">This report only restates numbers already shown
+                                    elsewhere on this site — it adds comparison phrasing ("above/below average"),
+                                    not new analysis or expert interpretation.</span></li>
+                            <li><span class="cat-caveat-text">A state scoring above or below average on one
+                                    measure does not mean that measure causes another shown here. Treat this as a
+                                    summary to start from, not a conclusion.</span></li>
+                            <li><span class="cat-caveat-text">Every caveat from Files 01–05 still applies to the
+                                    figures repeated here — see each file for full context on its own data.</span></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <p class="report-narrative" id="report-narrative">Loading report…</p>
+
+                <div class="metrics" id="report-cards-grid">
+                    <div class="metric clickable" data-goto="p1">
+                        <p class="lbl">Primary enrollment</p>
+                        <div class="row"><span class="who" id="report-label-1">—</span><span class="val"
+                                id="report-primary-enrol">—</span></div>
+                        <span class="view-link">→ File 01: Access &amp; enrollment</span>
+                    </div>
+                    <div class="metric clickable" data-goto="p2">
+                        <p class="lbl">Upper secondary completion</p>
+                        <div class="row"><span class="who" id="report-label-2">—</span><span class="val"
+                                id="report-completion">—</span></div>
+                        <span class="view-link">→ File 02: Outcomes &amp; attainment</span>
+                    </div>
+                    <div class="metric clickable" data-goto="p3">
+                        <p class="lbl">Primary student : teacher ratio</p>
+                        <div class="row"><span class="who" id="report-label-3">—</span><span class="val"
+                                id="report-ratio">—</span></div>
+                        <span class="view-link">→ File 03: Teaching resources</span>
+                    </div>
+                    <div class="metric clickable" data-goto="p4">
+                        <p class="lbl">Piped water access</p>
+                        <div class="row"><span class="who" id="report-label-4">—</span><span class="val"
+                                id="report-water">—</span></div>
+                        <span class="view-link">→ File 04: Infrastructure &amp; equity</span>
+                    </div>
+                    <div class="metric clickable" data-goto="p5">
+                        <p class="lbl">Median household income</p>
+                        <div class="row"><span class="who" id="report-label-5">—</span><span class="val"
+                                id="report-income">—</span></div>
+                        <span class="view-link">→ File 05: Socioeconomic context</span>
+                    </div>
+                </div>
+            </div>
             <!-- File 01: Access & Enrollment -->
-            <div class="sheet active" id="p1">
+            <div class="sheet" id="p1">
                 <div class="stamp">
                     <span class="stamp-inner">
                         <span class="stamp-top">BETA</span>
@@ -1277,6 +1389,7 @@
                 console.log('Rows after filtering to state-level totals:', enrolmentData.length);
                 statusText.textContent = 'Data current as of ' + latestDateLabel();
                 renderMetrics();
+                renderOverviewReport();
             } catch (error) {
                 console.error('Fetch error:', error);
                 statusText.textContent = 'Could not load enrollment data: ' + error.message;
@@ -1418,6 +1531,7 @@
             renderAmenitiesMetrics();
             renderIncomeMetrics();
             renderPovertyMetrics();
+            renderOverviewReport();
         });
 
         let currentSortMode = 'region';
@@ -1454,6 +1568,7 @@
                 completionData = rawData.filter(r => r.sex === 'both');
                 statusText.textContent = 'Data current as of ' + latestCompletionDate();
                 renderCompletionMetrics();
+                renderOverviewReport();
             } catch (error) {
                 console.error('Completion data fetch error:', error);
                 statusText.textContent = 'Could not load completion data: ' + error.message;
@@ -1565,11 +1680,7 @@
                 teachersData = rawData.filter(r => r.district === 'All Districts' && r.sex === 'both');
                 statusText.textContent = 'Data current as of ' + latestTeachersDate();
                 renderTeachersMetrics();
-                renderSchoolsMetrics();
-                renderAmenitiesMetrics();
-                renderIncomeMetrics();
-                renderPovertyMetrics();
-
+                renderOverviewReport();
             } catch (error) {
                 console.error('Teachers data fetch error:', error);
                 statusText.textContent = 'Could not load teacher data: ' + error.message;
@@ -1798,6 +1909,7 @@
                 amenitiesData = rawData.filter(r => r.district === 'All Districts');
                 statusText.textContent = 'Data current as of ' + latestAmenitiesDate();
                 renderAmenitiesMetrics();
+                renderOverviewReport();
             } catch (error) {
                 console.error('Amenities data fetch error:', error);
                 statusText.textContent = 'Could not load household access data: ' + error.message;
@@ -1922,6 +2034,7 @@
                 incomeData = rawData;
                 statusText.textContent = 'Data current as of ' + latestIncomeDate();
                 renderIncomeMetrics();
+                renderOverviewReport();
             } catch (error) {
                 console.error('Income data fetch error:', error);
                 statusText.textContent = 'Could not load income data: ' + error.message;
@@ -2129,6 +2242,80 @@
                 });
             }
         }
+
+        // ===== File 00: Overview report =====
+        function compareWord(value, reference) {
+            if (value == null || reference == null) return null;
+            const diff = value - reference;
+            if (Math.abs(diff) < reference * 0.02) return 'about in line with';
+            return diff > 0 ? 'above' : 'below';
+        }
+
+        function renderOverviewReport() {
+            const selectedState = document.getElementById('state-selector').value;
+            const narrative = document.getElementById('report-narrative');
+            const cardsGrid = document.getElementById('report-cards-grid');
+
+            if (selectedState === 'All States') {
+                narrative.textContent = 'Select a specific state (or "Malaysia") from the dropdown above to view its report.';
+                cardsGrid.style.display = 'none';
+                return;
+            }
+            cardsGrid.style.display = 'grid';
+
+            document.getElementById('report-title').textContent = selectedState + ' Report';
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById('report-label-' + i).textContent = selectedState;
+            }
+
+            const primaryEnrol = latestFor(selectedState, 'primary');
+            const completionUpper = latestCompletionFor(selectedState, 'secondary_upper');
+            const completionUpperMY = latestCompletionFor('Malaysia', 'secondary_upper');
+            const ratio = computeRatio(selectedState, 'primary');
+            const amenityRow = latestAmenitiesFor(selectedState);
+            const waterAvg = computeAmenityAverage('piped_water');
+            const incomeRow = latestIncomeFor(selectedState);
+            const allStates = Object.keys(STATE_REGIONS);
+            const incomeAvg = computeStateAverage(allStates, s => parseNumOrNull(latestIncomeFor(s)?.income_median));
+
+            const dataReady = enrolmentData.length && completionData.length && teachersData.length && amenitiesData.length && incomeData.length;
+
+            if (!dataReady) {
+                narrative.textContent = 'Loading report…';
+            } else {
+                const waterVal = parseAmenityValue(amenityRow?.piped_water);
+                const incomeVal = parseNumOrNull(incomeRow?.income_median);
+                const compVsWater = compareWord(waterVal, waterAvg);
+                const compVsIncome = compareWord(incomeVal, incomeAvg);
+                const compVsCompletion = compareWord(completionUpper?.completion, completionUpperMY?.completion);
+
+                narrative.textContent =
+                    `${selectedState} enrolls ${formatNum(primaryEnrol?.students)} primary students in government schools. ` +
+                    `At the upper secondary level, ${formatRate(completionUpper?.completion)} of students complete their schooling` +
+                    (compVsCompletion ? `, ${compVsCompletion} the national figure of ${formatRate(completionUpperMY?.completion)}. ` : '. ') +
+                    `Each primary school teacher here supports an average of ${formatRatio(ratio)} students. ` +
+                    `${formatRate(waterVal)} of households have piped water access` +
+                    (compVsWater ? `, ${compVsWater} the average across states (${formatRate(waterAvg)}). ` : '. ') +
+                    `Median household income is ${formatCurrency(incomeVal)}` +
+                    (compVsIncome ? `, ${compVsIncome} the average across states (${formatCurrency(incomeAvg)}).` : '.') +
+                    ` These figures describe conditions in ${selectedState} — they don't by themselves explain why any single outcome occurs.`;
+            }
+
+            document.getElementById('report-primary-enrol').textContent = formatNum(primaryEnrol?.students);
+            document.getElementById('report-completion').textContent = formatRate(completionUpper?.completion);
+            document.getElementById('report-ratio').textContent = formatRatio(ratio);
+            document.getElementById('report-water').textContent = formatRate(parseAmenityValue(amenityRow?.piped_water));
+            document.getElementById('report-income').textContent = formatCurrency(parseNumOrNull(incomeRow?.income_median));
+        }
+
+        document.querySelectorAll('#report-cards-grid .clickable').forEach(card => {
+            card.addEventListener('click', () => {
+                const targetTab = document.querySelector(`.tab[data-panel="${card.dataset.goto}"]`);
+                if (targetTab) targetTab.click();
+            });
+        });
+
+        renderOverviewReport();
 
     </script>
 
