@@ -54,36 +54,43 @@
             position: relative;
         }
 
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
         .merdeka-badge {
-            position: fixed;
-            top: 16px;
-            right: 16px;
             background: #FFFFFF;
             border-radius: 8px;
             box-shadow: 0 4px 14px rgba(43, 38, 32, 0.18);
-            padding: 28px;
-            z-index: 100;
+            padding: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .merdeka-badge img {
-            height: 56px;
+            height: 48px;
             width: auto;
             display: block;
         }
 
         @media (max-width: 640px) {
+            .page-header {
+                flex-direction: column-reverse;
+            }
+
             .merdeka-badge {
-                position: static;
-                margin: 0 0 20px;
-                padding: 16px;
-                display: inline-flex;
+                padding: 14px;
             }
 
             .merdeka-badge img {
-                height: 40px;
+                height: 36px;
             }
         }
 
@@ -428,13 +435,16 @@
 <body>
 
     <div class="wrap">
-
-        <div class="merdeka-badge">
-            <img src="assets/merdeka-2026-logo.png" alt="Logo Malaysia MADANI - Hari Kebangsaan dan Hari Malaysia 2026">
+        <div class="page-header">
+            <div>
+                <p class="eyebrow">A public reference file — no login, no paywall</p>
+                <h1 class="title">MyEdu<span>Stats</span></h1>
+            </div>
+            <div class="merdeka-badge">
+                <img src="assets/merdeka-2026-logo.png"
+                    alt="Logo Malaysia MADANI - Hari Kebangsaan dan Hari Malaysia 2026">
+            </div>
         </div>
-
-        <p class="eyebrow">A public reference file — no login, no paywall</p>
-        <h1 class="title">MyEdu<span>Stats</span></h1>
 
         <!-- Context Bar for State/National Selection -->
         <div class="context-bar">
