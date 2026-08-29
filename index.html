@@ -75,6 +75,15 @@
         }
 
         /* New Context Bar Styles */
+        .controls-sticky {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--deskbg);
+            padding-top: 12px;
+            margin: 0 0 -12px;
+        }
+
         .context-bar {
             display: flex;
             gap: 16px;
@@ -386,7 +395,7 @@
 
         .state-table {
             width: 100%;
-            min-width: 640px;
+            min-width: 460px;
             border-collapse: collapse;
             font-size: 13.5px;
             table-layout: fixed;
@@ -412,7 +421,11 @@
             font-family: 'IBM Plex Mono', monospace;
             text-align: right;
             font-variant-numeric: tabular-nums;
-            padding-right: 24px;
+            padding-right: 8px;
+        }
+
+        #completion-table {
+            min-width: 520px;
         }
 
         .state-table tr.region-header td {
@@ -496,49 +509,53 @@
         <p class="eyebrow">A public reference file — no login, no paywall</p>
         <h1 class="title">MyEdu<span>Stats</span></h1>
 
-        <div class="context-bar">
-            <select id="state-selector">
-                <option value="Malaysia">Malaysia (National Overview)</option>
-                <option value="All States">All States (compare)</option>
-                <option value="Johor">Johor</option>
-                <option value="Kedah">Kedah</option>
-                <option value="Kelantan">Kelantan</option>
-                <option value="Melaka">Melaka</option>
-                <option value="Negeri Sembilan">Negeri Sembilan</option>
-                <option value="Pahang">Pahang</option>
-                <option value="Perak">Perak</option>
-                <option value="Perlis">Perlis</option>
-                <option value="Pulau Pinang">Pulau Pinang</option>
-                <option value="Sabah">Sabah</option>
-                <option value="Sarawak">Sarawak</option>
-                <option value="Selangor">Selangor</option>
-                <option value="Terengganu">Terengganu</option>
-                <option value="W.P. Kuala Lumpur">W.P. Kuala Lumpur</option>
-                <option value="W.P. Labuan">W.P. Labuan</option>
-                <option value="W.P. Putrajaya">W.P. Putrajaya</option>
-            </select>
+        <div class="controls-sticky">
+            <div class="context-bar">
+                <select id="state-selector">
+                    <option value="Malaysia">Malaysia (National Overview)</option>
+                    <option value="All States">All States (compare)</option>
+                    <option value="Johor">Johor</option>
+                    <option value="Kedah">Kedah</option>
+                    <option value="Kelantan">Kelantan</option>
+                    <option value="Melaka">Melaka</option>
+                    <option value="Negeri Sembilan">Negeri Sembilan</option>
+                    <option value="Pahang">Pahang</option>
+                    <option value="Perak">Perak</option>
+                    <option value="Perlis">Perlis</option>
+                    <option value="Pulau Pinang">Pulau Pinang</option>
+                    <option value="Sabah">Sabah</option>
+                    <option value="Sarawak">Sarawak</option>
+                    <option value="Selangor">Selangor</option>
+                    <option value="Terengganu">Terengganu</option>
+                    <option value="W.P. Kuala Lumpur">W.P. Kuala Lumpur</option>
+                    <option value="W.P. Labuan">W.P. Labuan</option>
+                    <option value="W.P. Putrajaya">W.P. Putrajaya</option>
+                </select>
 
-            <label class="toggle-container" id="compare-toggle-container">
-                <input type="checkbox" id="compare-toggle">
-                <span class="slider"></span>
-                Compare with National Average
-            </label>
+                <label class="toggle-container" id="compare-toggle-container">
+                    <input type="checkbox" id="compare-toggle">
+                    <span class="slider"></span>
+                    Compare with National Average
+                </label>
 
-            <div class="toggle-container" id="sort-control-container" style="display:none; gap:12px;">
-                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-                    <input type="radio" name="sort-mode" value="alpha" checked> Alphabetical
-                </label>
-                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-                    <input type="radio" name="sort-mode" value="region"> By region
-                </label>
+                <div class="toggle-container" id="sort-control-container" style="display:none; gap:12px;">
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                        <input type="radio" name="sort-mode" value="alpha" checked> Alphabetical
+                    </label>
+                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                        <input type="radio" name="sort-mode" value="region"> By region
+                    </label>
+                </div>
             </div>
-        </div>
 
-        <div class="tabbar" id="tabbar">
-            <button class="tab active" data-theme="theme-blue" data-panel="p1"><span class="num">FILE 01</span>Access
-                &amp; enrollment</button>
-            <button class="tab" data-theme="theme-green" data-panel="p2"><span class="num">FILE 02</span>Outcomes &amp;
-                attainment</button>
+            <div class="tabbar" id="tabbar">
+                <button class="tab active" data-theme="theme-blue" data-panel="p1"><span class="num">FILE
+                        01</span>Access
+                    &amp; enrollment</button>
+                <button class="tab" data-theme="theme-green" data-panel="p2"><span class="num">FILE 02</span>Outcomes
+                    &amp;
+                    attainment</button>
+            </div>
         </div>
 
         <div class="folder theme-blue" id="folder">
