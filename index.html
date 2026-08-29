@@ -431,7 +431,22 @@
                 max-width: none;
                 flex: 1 1 30%;
                 font-size: 13px;
-                padding: 10px 12px;
+                padding: 10px 12px 8px;
+                top: 0 !important;
+                min-height: 58px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                border-bottom: 3px solid transparent;
+            }
+
+            .tab:hover {
+                top: 0 !important;
+            }
+
+            .tab.active {
+                top: 0 !important;
+                border-bottom: 3px solid var(--accent-900);
             }
 
             .sheet {
