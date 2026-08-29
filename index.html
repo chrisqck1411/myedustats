@@ -28,6 +28,11 @@
             --green-500: #4B7F3C;
             --green-700: #2D5324;
             --green-900: #1B3315;
+            --rust-50: #FBEDE3;
+            --rust-200: #E3A87E;
+            --rust-500: #B85C2E;
+            --rust-700: #8A3E1B;
+            --rust-900: #5C280F;
             --accent-50: var(--blue-50);
             --accent-200: var(--blue-200);
             --accent-500: var(--blue-500);
@@ -145,6 +150,37 @@
 
         .toggle-container input:checked+.slider::before {
             transform: translateX(16px);
+        }
+
+        .sort-toggle {
+            display: flex;
+            gap: 3px;
+            background: var(--paper-edge);
+            padding: 3px;
+            border-radius: 8px;
+        }
+
+        .sort-btn {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11.5px;
+            letter-spacing: .04em;
+            color: var(--ink-soft);
+            background: transparent;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background .15s ease, color .15s ease;
+        }
+
+        .sort-btn:hover {
+            color: var(--ink);
+        }
+
+        .sort-btn.active {
+            background: var(--accent-700);
+            color: var(--paper);
+            font-weight: 600;
         }
 
         /* Rounded Tabs Layout */
@@ -498,6 +534,14 @@
             --accent-700: var(--green-700);
             --accent-900: var(--green-900);
         }
+
+        .theme-rust {
+            --accent-50: var(--rust-50);
+            --accent-200: var(--rust-200);
+            --accent-500: var(--rust-500);
+            --accent-700: var(--rust-700);
+            --accent-900: var(--rust-900);
+        }
     </style>
 </head>
 
@@ -536,23 +580,22 @@
                     Compare with National Average
                 </label>
 
-                <div class="toggle-container" id="sort-control-container" style="display:none; gap:12px;">
-                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-                        <input type="radio" name="sort-mode" value="alpha" checked> Alphabetical
-                    </label>
-                    <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-                        <input type="radio" name="sort-mode" value="region"> By region
-                    </label>
+                <div class="sort-toggle" id="sort-control-container" style="display:none;">
+                    <button class="sort-btn" data-sort="alpha" type="button">Alphabetical</button>
+                    <button class="sort-btn active" data-sort="region" type="button">By region</button>
                 </div>
             </div>
 
             <div class="tabbar" id="tabbar">
-                <button class="tab active" data-theme="theme-blue" data-panel="p1"><span class="num">FILE
-                        01</span>Access
-                    &amp; enrollment</button>
-                <button class="tab" data-theme="theme-green" data-panel="p2"><span class="num">FILE 02</span>Outcomes
-                    &amp;
-                    attainment</button>
+                <button class="tab active" data-theme="theme-blue" data-panel="p1">
+                    <span class="num">FILE 01</span>Access &amp; enrollment
+                </button>
+                <button class="tab" data-theme="theme-green" data-panel="p2">
+                    <span class="num">FILE 02</span>Outcomes &amp; attainment
+                </button>
+                <button class="tab" data-theme="theme-rust" data-panel="p3">
+                    <span class="num">FILE 03</span>Teaching resources
+                </button>
             </div>
         </div>
 
@@ -618,7 +661,6 @@
                 </div>
             </div>
 
-            <!-- File 02 Placeholder -->
             <!-- File 02: Outcomes & Attainment -->
             <div class="sheet" id="p2">
                 <div class="stamp">
@@ -693,6 +735,92 @@
                             </tr>
                         </thead>
                         <tbody id="completion-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- File 03: Teaching Resources -->
+            <div class="sheet" id="p3">
+                <div class="stamp">
+                    <span class="stamp-inner">
+                        <span class="stamp-top">BETA</span>
+                        <span class="stamp-divider"></span>
+                        <span class="stamp-bottom">TESTING<br>IN PROGRESS</span>
+                    </span>
+                </div>
+                <p class="cat-eyebrow">File 03 · Teaching resources</p>
+                <h2 class="cat-title" id="display-title-3">Teachers &amp; Student-Teacher Ratio</h2>
+                <div class="cat-info">
+                    <p class="info-label">About this data</p>
+                    <p>This shows how many teachers work in government primary and secondary schools,
+                        by state and nationally, and the resulting student-teacher ratio — calculated by
+                        dividing enrollment (File 01) by teacher counts. A lower ratio generally means
+                        more individual attention per student.</p>
+                </div>
+                <p class="cat-source">Source: Ministry of Education Malaysia (EMIS), via OpenDOSM ·
+                    <a href="https://open.dosm.gov.my/data-catalogue/teachers_district" target="_blank">Browse or
+                        download the raw dataset</a>
+                </p>
+                <p class="cat-desc" id="teachers-status">Fetching data from OpenDOSM...</p>
+
+                <div class="metrics" id="teachers-metrics-grid">
+                    <div class="metric">
+                        <p class="lbl">Primary teachers</p>
+                        <div class="row"><span class="who" id="teachers-state-label-1">—</span><span class="val"
+                                id="primary-teachers-state">—</span></div>
+                        <div class="row" id="primary-teachers-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim"
+                                id="primary-teachers-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Secondary teachers</p>
+                        <div class="row"><span class="who" id="teachers-state-label-2">—</span><span class="val"
+                                id="secondary-teachers-state">—</span></div>
+                        <div class="row" id="secondary-teachers-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim"
+                                id="secondary-teachers-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Primary student : teacher ratio</p>
+                        <div class="row"><span class="who" id="teachers-state-label-3">—</span><span class="val"
+                                id="primary-ratio-state">—</span></div>
+                        <div class="row" id="primary-ratio-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim" id="primary-ratio-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Secondary student : teacher ratio</p>
+                        <div class="row"><span class="who" id="teachers-state-label-4">—</span><span class="val"
+                                id="secondary-ratio-state">—</span></div>
+                        <div class="row" id="secondary-ratio-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim"
+                                id="secondary-ratio-national">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="state-table-wrap" id="teachers-table-wrap" style="display:none;">
+                    <table class="state-table" id="teachers-table">
+                        <colgroup>
+                            <col style="width: 170px;">
+                            <col style="width: 130px;">
+                            <col style="width: 110px;">
+                            <col style="width: 110px;">
+                            <col style="width: 90px;">
+                            <col style="width: 90px;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>Region</th>
+                                <th>Primary Teachers</th>
+                                <th>Secondary Teachers</th>
+                                <th>Primary Ratio</th>
+                                <th>Sec. Ratio</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teachers-table-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -806,7 +934,7 @@
         }
 
         function renderAllStatesTable() {
-            const sortMode = document.querySelector('input[name="sort-mode"]:checked').value;
+            const sortMode = currentSortMode;
             const tbody = document.getElementById('state-table-body');
             tbody.innerHTML = '';
 
@@ -867,13 +995,23 @@
             }
             renderMetrics();
             renderCompletionMetrics();
+            renderTeachersMetrics();
         });
 
-        document.querySelectorAll('input[name="sort-mode"]').forEach(radio => {
-            radio.addEventListener('change', () => { renderMetrics(); renderCompletionMetrics(); });
+        let currentSortMode = 'region';
+
+        document.querySelectorAll('.sort-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentSortMode = btn.dataset.sort;
+                renderMetrics();
+                renderCompletionMetrics();
+                renderTeachersMetrics();
+            });
         });
 
-        compareToggle.addEventListener('change', () => { renderMetrics(); renderCompletionMetrics(); });
+        compareToggle.addEventListener('change', () => { renderMetrics(); renderCompletionMetrics(); renderTeachersMetrics(); });
 
         // ===== File 02: Completion rates =====
         let completionData = [];
@@ -948,7 +1086,7 @@
         }
 
         function renderAllStatesCompletionTable() {
-            const sortMode = document.querySelector('input[name="sort-mode"]:checked').value;
+            const sortMode = currentSortMode;
             const tbody = document.getElementById('completion-table-body');
             tbody.innerHTML = '';
 
@@ -985,7 +1123,126 @@
         }
 
         loadEnrolmentData();
+
+        // ===== File 03: Teachers & student-teacher ratio =====
+        let teachersData = [];
+
+        async function loadTeachersData() {
+            const statusText = document.getElementById('teachers-status');
+            const url = 'https://api.data.gov.my/data-catalogue?id=teachers_district';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok, status ' + response.status);
+                const rawData = await response.json();
+                console.log('TEACHERS DATA — total rows:', rawData.length);
+                console.log('TEACHERS DATA — sample row:', rawData[0]);
+                teachersData = rawData.filter(r => r.district === 'All Districts' && r.sex === 'both');
+                statusText.textContent = 'Data current as of ' + latestTeachersDate();
+                renderTeachersMetrics();
+            } catch (error) {
+                console.error('Teachers data fetch error:', error);
+                statusText.textContent = 'Could not load teacher data: ' + error.message;
+            }
+        }
+
+        function latestTeachersDate() {
+            const dates = teachersData.map(r => r.date).sort();
+            return dates.length ? dates[dates.length - 1] : 'unknown';
+        }
+
+        function latestTeachersFor(stateName, stage) {
+            const rows = teachersData.filter(r => r.state === stateName && r.stage === stage);
+            if (!rows.length) return null;
+            return rows.reduce((a, b) => (a.date > b.date ? a : b));
+        }
+
+        function computeRatio(stateName, stage) {
+            const teacherRow = latestTeachersFor(stateName, stage);
+            const enrolRow = latestFor(stateName, stage);
+            if (!teacherRow || !enrolRow || !teacherRow.teachers) return null;
+            return enrolRow.students / teacherRow.teachers;
+        }
+
+        function formatRatio(r) {
+            return r == null ? '—' : r.toFixed(1) + ' : 1';
+        }
+
+        function renderTeachersMetrics() {
+            const selectedState = document.getElementById('state-selector').value;
+
+            if (selectedState === 'All States') {
+                document.getElementById('teachers-metrics-grid').style.display = 'none';
+                document.getElementById('teachers-table-wrap').style.display = 'block';
+                renderAllStatesTeachersTable();
+                return;
+            }
+
+            document.getElementById('teachers-metrics-grid').style.display = 'grid';
+            document.getElementById('teachers-table-wrap').style.display = 'none';
+
+            const compareOn = document.getElementById('compare-toggle').checked;
+            const primaryTeachers = latestTeachersFor(selectedState, 'primary');
+            const secondaryTeachers = latestTeachersFor(selectedState, 'secondary');
+
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById('teachers-state-label-' + i).textContent = selectedState;
+            }
+            document.getElementById('primary-teachers-state').textContent = formatNum(primaryTeachers?.teachers);
+            document.getElementById('secondary-teachers-state').textContent = formatNum(secondaryTeachers?.teachers);
+            document.getElementById('primary-ratio-state').textContent = formatRatio(computeRatio(selectedState, 'primary'));
+            document.getElementById('secondary-ratio-state').textContent = formatRatio(computeRatio(selectedState, 'secondary'));
+
+            const showCompare = compareOn && selectedState !== 'Malaysia';
+            ['primary-teachers-national-row', 'secondary-teachers-national-row', 'primary-ratio-national-row', 'secondary-ratio-national-row']
+                .forEach(id => document.getElementById(id).style.display = showCompare ? 'flex' : 'none');
+
+            if (showCompare) {
+                document.getElementById('primary-teachers-national').textContent = formatNum(latestTeachersFor('Malaysia', 'primary')?.teachers);
+                document.getElementById('secondary-teachers-national').textContent = formatNum(latestTeachersFor('Malaysia', 'secondary')?.teachers);
+                document.getElementById('primary-ratio-national').textContent = formatRatio(computeRatio('Malaysia', 'primary'));
+                document.getElementById('secondary-ratio-national').textContent = formatRatio(computeRatio('Malaysia', 'secondary'));
+            }
+        }
+
+        function renderAllStatesTeachersTable() {
+            const sortMode = currentSortMode;
+            const tbody = document.getElementById('teachers-table-body');
+            tbody.innerHTML = '';
+
+            const states = Object.keys(STATE_REGIONS);
+
+            const renderRow = (state) => {
+                const primaryTeachers = latestTeachersFor(state, 'primary');
+                const secondaryTeachers = latestTeachersFor(state, 'secondary');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+               <td>${state}</td>
+               <td>${STATE_REGIONS[state]}</td>
+               <td class="num">${formatNum(primaryTeachers?.teachers)}</td>
+               <td class="num">${formatNum(secondaryTeachers?.teachers)}</td>
+               <td class="num">${formatRatio(computeRatio(state, 'primary'))}</td>
+               <td class="num">${formatRatio(computeRatio(state, 'secondary'))}</td>
+           `;
+                return tr;
+            };
+
+            if (sortMode === 'alpha') {
+                states.sort((a, b) => a.localeCompare(b)).forEach(state => tbody.appendChild(renderRow(state)));
+            } else {
+                REGION_ORDER.forEach(region => {
+                    const headerRow = document.createElement('tr');
+                    headerRow.className = 'region-header';
+                    headerRow.innerHTML = `<td colspan="6">${region}</td>`;
+                    tbody.appendChild(headerRow);
+                    states.filter(s => STATE_REGIONS[s] === region)
+                        .sort((a, b) => a.localeCompare(b))
+                        .forEach(state => tbody.appendChild(renderRow(state)));
+                });
+            }
+        }
+
         loadCompletionData();
+        loadTeachersData();
     </script>
 
 </body>
