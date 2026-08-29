@@ -213,20 +213,57 @@
         .stamp {
             float: right;
             font-family: 'IBM Plex Mono', monospace;
-            font-size: 10.5px;
-            letter-spacing: .06em;
             color: var(--accent-700);
-            border: 1.5px solid var(--accent-700);
+            border: 2px solid var(--accent-700);
             border-radius: 50%;
-            width: 104px;
-            height: 104px;
+            width: 108px;
+            height: 108px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            transform: rotate(-9deg);
+            transform: rotate(-8deg);
             margin: -6px -4px 10px 16px;
-            opacity: .8;
+            opacity: .85;
+            position: relative;
+        }
+
+        .stamp::before {
+            content: "";
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            right: 6px;
+            bottom: 6px;
+            border: 1px solid var(--accent-700);
+            border-radius: 50%;
+            opacity: .55;
+        }
+
+        .stamp .stamp-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stamp .stamp-top {
+            font-weight: 700;
+            font-size: 12.5px;
+            letter-spacing: .14em;
+        }
+
+        .stamp .stamp-divider {
+            width: 32px;
+            height: 1px;
+            background: var(--accent-700);
+            opacity: .6;
+            margin: 4px 0;
+        }
+
+        .stamp .stamp-bottom {
+            font-size: 8px;
+            letter-spacing: .09em;
+            line-height: 1.35;
         }
 
         .cat-eyebrow {
@@ -254,18 +291,42 @@
         }
 
         .cat-info {
-            font-size: 14px;
-            color: var(--ink);
-            max-width: 620px;
-            line-height: 1.6;
-            margin: 0 0 20px;
             background: var(--accent-50);
-            border-left: 3px solid var(--accent-500);
-            padding: 12px 16px;
-            border-radius: 0 6px 6px 0;
+            border: 1px solid var(--accent-200);
+            border-radius: 6px;
+            padding: 16px 18px;
+            margin: 0 0 14px;
+            max-width: 620px;
         }
 
-        .cat-info a {
+        .cat-info .info-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10.5px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--accent-700);
+            font-weight: 600;
+            margin: 0 0 8px;
+        }
+
+        .cat-info p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--ink);
+            margin: 0;
+        }
+
+        .cat-source {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11.5px;
+            color: var(--ink-soft);
+            max-width: 620px;
+            margin: 0 0 26px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--rule);
+        }
+
+        .cat-source a {
             color: var(--accent-700);
             font-weight: 600;
             text-decoration: underline;
@@ -464,16 +525,24 @@
         <div class="folder theme-blue" id="folder">
             <!-- File 01: Access & Enrollment -->
             <div class="sheet active" id="p1">
-                <div class="stamp"><span><b>OPEN DATA : DOSM </b><br>API Testing</span></div>
+                <div class="stamp">
+                    <span class="stamp-inner">
+                        <span class="stamp-top">BETA</span>
+                        <span class="stamp-divider"></span>
+                        <span class="stamp-bottom">TESTING<br>IN PROGRESS</span>
+                    </span>
+                </div>
                 <p class="cat-eyebrow">File 01 · Access &amp; enrollment</p>
                 <h2 class="cat-title" id="display-title">National Overview</h2>
-                <p class="cat-info">
-                    This shows how many students are enrolled in government primary and secondary schools,
-                    by state and nationally. Comparing primary vs. secondary enrollment can reveal where
-                    students are dropping out of the system between school stages.
-                    Source: Ministry of Education Malaysia (EMIS), via OpenDOSM —
-                    <a href="https://open.dosm.gov.my/data-catalogue/enrolment_school_district" target="_blank">
-                        browse or download the raw dataset here</a>.
+                <div class="cat-info">
+                    <p class="info-label">About this data</p>
+                    <p>This shows how many students are enrolled in government primary and secondary
+                        schools, by state and nationally. Comparing primary vs. secondary enrollment can
+                        reveal where students are dropping out of the system between school stages.</p>
+                </div>
+                <p class="cat-source">Source: Ministry of Education Malaysia (EMIS), via OpenDOSM ·
+                    <a href="https://open.dosm.gov.my/data-catalogue/enrolment_school_district" target="_blank">Browse
+                        or download the raw dataset</a>
                 </p>
                 <p class="cat-desc" id="api-status">Fetching data from OpenDOSM...</p>
                 <div class="metrics" id="metrics-grid">
@@ -513,14 +582,16 @@
             <div class="sheet" id="p2">
                 <p class="cat-eyebrow">File 02 · Outcomes &amp; attainment</p>
                 <h2 class="cat-title">School Completion Rates</h2>
-                <p class="cat-info">
-                    This will show what share of students actually finish primary, lower secondary,
-                    and upper secondary school, at national and state level. Completion rates matter
-                    more than enrollment alone, since they capture where students leave the system
-                    rather than just how many started.
-                    Source: Ministry of Education Malaysia (EMIS), via OpenDOSM —
-                    <a href="https://open.dosm.gov.my/data-catalogue/completion_school_state" target="_blank">
-                        browse or download the raw dataset here</a>.
+                <div class="cat-info">
+                    <p class="info-label">About this data</p>
+                    <p>This will show what share of students actually finish primary, lower secondary,
+                        and upper secondary school, at national and state level. Completion rates matter
+                        more than enrollment alone, since they capture where students leave the system
+                        rather than just how many started.</p>
+                </div>
+                <p class="cat-source">Source: Ministry of Education Malaysia (EMIS), via OpenDOSM ·
+                    <a href="https://open.dosm.gov.my/data-catalogue/completion_school_state" target="_blank">Browse or
+                        download the raw dataset</a>
                 </p>
                 <p class="cat-desc">Work in progress — data coming soon.</p>
             </div>
