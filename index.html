@@ -253,6 +253,24 @@
             margin: 0 0 26px;
         }
 
+        .cat-info {
+            font-size: 14px;
+            color: var(--ink);
+            max-width: 620px;
+            line-height: 1.6;
+            margin: 0 0 20px;
+            background: var(--accent-50);
+            border-left: 3px solid var(--accent-500);
+            padding: 12px 16px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .cat-info a {
+            color: var(--accent-700);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
         .metrics {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -446,9 +464,17 @@
         <div class="folder theme-blue" id="folder">
             <!-- File 01: Access & Enrollment -->
             <div class="sheet active" id="p1">
-                <div class="stamp"><span><b>OPEN DATA</b><br>API Testing</span></div>
+                <div class="stamp"><span><b>OPEN DATA : DOSM </b><br>API Testing</span></div>
                 <p class="cat-eyebrow">File 01 · Access &amp; enrollment</p>
                 <h2 class="cat-title" id="display-title">National Overview</h2>
+                <p class="cat-info">
+                    This shows how many students are enrolled in government primary and secondary schools,
+                    by state and nationally. Comparing primary vs. secondary enrollment can reveal where
+                    students are dropping out of the system between school stages.
+                    Source: Ministry of Education Malaysia (EMIS), via OpenDOSM —
+                    <a href="https://open.dosm.gov.my/data-catalogue/enrolment_school_district" target="_blank">
+                        browse or download the raw dataset here</a>.
+                </p>
                 <p class="cat-desc" id="api-status">Fetching data from OpenDOSM...</p>
                 <div class="metrics" id="metrics-grid">
                     <div class="metric">
@@ -485,8 +511,18 @@
 
             <!-- File 02 Placeholder -->
             <div class="sheet" id="p2">
-                <p class="cat-eyebrow">File 02 · Outcomes</p>
-                <h2 class="cat-title">Work in progress</h2>
+                <p class="cat-eyebrow">File 02 · Outcomes &amp; attainment</p>
+                <h2 class="cat-title">School Completion Rates</h2>
+                <p class="cat-info">
+                    This will show what share of students actually finish primary, lower secondary,
+                    and upper secondary school, at national and state level. Completion rates matter
+                    more than enrollment alone, since they capture where students leave the system
+                    rather than just how many started.
+                    Source: Ministry of Education Malaysia (EMIS), via OpenDOSM —
+                    <a href="https://open.dosm.gov.my/data-catalogue/completion_school_state" target="_blank">
+                        browse or download the raw dataset here</a>.
+                </p>
+                <p class="cat-desc">Work in progress — data coming soon.</p>
             </div>
         </div>
     </div>
