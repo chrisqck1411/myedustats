@@ -367,6 +367,92 @@
             margin: 0;
         }
 
+        .cat-caveat {
+            background: rgba(43, 38, 32, 0.06);
+            border: 1px solid rgba(43, 38, 32, 0.18);
+            border-left: 3px solid var(--ink);
+            border-radius: 4px;
+            padding: 10px 14px;
+            margin-top: 12px;
+        }
+
+        .cat-caveat-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            line-height: 1;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--ink);
+            margin: 0 0 12px;
+        }
+
+        .cat-caveat-icon {
+            font-size: 16px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        .cat-caveat p {
+            font-size: 13px;
+            line-height: 1.55;
+            color: var(--ink);
+            margin: 0 0 6px;
+        }
+
+        .cat-caveat p:last-child {
+            margin-bottom: 0;
+        }
+
+        .cat-caveat ol {
+            list-style: none;
+            counter-reset: caveat-counter;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .cat-caveat li {
+            counter-increment: caveat-counter;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 13px;
+            line-height: 1.55;
+            color: var(--ink);
+        }
+
+        .cat-caveat-text {
+            flex: 1;
+        }
+
+        .cat-caveat li::before {
+            content: counter(caveat-counter, decimal-leading-zero);
+            flex-shrink: 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #FFFFFF;
+            background: var(--accent-900);
+            border-radius: 4px;
+            padding: 2px 6px;
+            margin-top: 1px;
+        }
+
+        .subsection-title {
+            font-family: 'Manrope', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 30px 0 4px;
+            color: var(--ink);
+        }
+
         .cat-source {
             font-family: 'IBM Plex Mono', monospace;
             font-size: 11.5px;
@@ -851,13 +937,143 @@
                     </span>
                 </div>
                 <p class="cat-eyebrow">File 04 · Infrastructure &amp; equity</p>
-                <h2 class="cat-title">Coming soon</h2>
+                <h2 class="cat-title">School Capacity &amp; Household Access</h2>
                 <div class="cat-info">
                     <p class="info-label">About this data</p>
-                    <p>This will cover school infrastructure and the rural/urban gap within states —
-                        school counts by district, and where the data allows, internet and device access.</p>
+                    <p>This combines two datasets: how many government schools exist per district, and what
+                        share of households have access to electricity, piped water, and sanitary latrines.</p>
+
+                    <div class="cat-caveat">
+                        <p class="cat-caveat-label"><span class="cat-caveat-icon">⚠️</span> Caveat</p>
+                        <ol>
+                            <li><span class="cat-caveat-text">The household-access figures measure conditions in
+                                    students'
+                                    <strong>homes</strong>, not inside schools. They're shown as a proxy for regional
+                                    disadvantage, not a direct measurement of classroom conditions.</span></li>
+                            <li><span class="cat-caveat-text">This dataset has no official national figure — where you
+                                    see
+                                    an "avg. across states" for household access, it's an unweighted average we
+                                    calculated
+                                    ourselves, not an official population-weighted national statistic.</span></li>
+                            <li><span class="cat-caveat-text">Some districts have missing data in the most recent year.
+                                    A dash (—) means the figure wasn't reported, not that it was zero.</span></li>
+                        </ol>
+                    </div>
                 </div>
-                <p class="cat-desc">Work in progress — data coming soon.</p>
+                <p class="cat-source">Source: Ministry of Education Malaysia (EMIS) &amp; Department of Statistics
+                    Malaysia (DOSM), via OpenDOSM ·
+                    <a href="https://open.dosm.gov.my/data-catalogue/schools_district" target="_blank">School counts
+                        dataset</a> ·
+                    <a href="https://open.dosm.gov.my/data-catalogue/hh_access_amenities" target="_blank">Household
+                        access dataset</a>
+                </p>
+
+                <h3 class="subsection-title">School Capacity</h3>
+                <p class="cat-desc" id="schools-status">Fetching data from OpenDOSM...</p>
+
+                <div class="metrics" id="schools-metrics-grid">
+                    <div class="metric">
+                        <p class="lbl">Primary schools</p>
+                        <div class="row"><span class="who" id="schools-state-label-1">—</span><span class="val"
+                                id="primary-schools-state">—</span></div>
+                        <div class="row" id="primary-schools-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim"
+                                id="primary-schools-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Secondary schools</p>
+                        <div class="row"><span class="who" id="schools-state-label-2">—</span><span class="val"
+                                id="secondary-schools-state">—</span></div>
+                        <div class="row" id="secondary-schools-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim"
+                                id="secondary-schools-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Public universities</p>
+                        <div class="row"><span class="who" id="schools-state-label-3">—</span><span class="val"
+                                id="tertiary-schools-state">—</span></div>
+                        <div class="row" id="tertiary-schools-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim"
+                                id="tertiary-schools-national">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="state-table-wrap" id="schools-table-wrap" style="display:none;">
+                    <table class="state-table" id="schools-table">
+                        <colgroup>
+                            <col style="width: 170px;">
+                            <col style="width: 130px;">
+                            <col style="width: 110px;">
+                            <col style="width: 110px;">
+                            <col style="width: 110px;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>Region</th>
+                                <th>Primary</th>
+                                <th>Secondary</th>
+                                <th>Tertiary</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schools-table-body"></tbody>
+                    </table>
+                </div>
+
+                <h3 class="subsection-title">Household Access (proxy for regional disadvantage)</h3>
+                <p class="cat-desc" id="amenities-status">Fetching data from OpenDOSM...</p>
+
+                <div class="metrics" id="amenities-metrics-grid">
+                    <div class="metric">
+                        <p class="lbl">Piped water access</p>
+                        <div class="row"><span class="who" id="amenities-state-label-1">—</span><span class="val"
+                                id="piped-water-state">—</span></div>
+                        <div class="row" id="piped-water-national-row" style="display:none;">
+                            <span class="who">Avg. states</span><span class="val dim" id="piped-water-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Sanitation access</p>
+                        <div class="row"><span class="who" id="amenities-state-label-2">—</span><span class="val"
+                                id="sanitation-state">—</span></div>
+                        <div class="row" id="sanitation-national-row" style="display:none;">
+                            <span class="who">Avg. states</span><span class="val dim" id="sanitation-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Electricity access</p>
+                        <div class="row"><span class="who" id="amenities-state-label-3">—</span><span class="val"
+                                id="electricity-state">—</span></div>
+                        <div class="row" id="electricity-national-row" style="display:none;">
+                            <span class="who">Avg. states</span><span class="val dim" id="electricity-national">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="state-table-wrap" id="amenities-table-wrap" style="display:none;">
+                    <table class="state-table" id="amenities-table">
+                        <colgroup>
+                            <col style="width: 170px;">
+                            <col style="width: 130px;">
+                            <col style="width: 90px;">
+                            <col style="width: 90px;">
+                            <col style="width: 90px;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>Region</th>
+                                <th>Piped Water</th>
+                                <th>Sanitation</th>
+                                <th>Electricity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="amenities-table-body"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -1031,6 +1247,8 @@
             renderMetrics();
             renderCompletionMetrics();
             renderTeachersMetrics();
+            renderSchoolsMetrics();
+            renderAmenitiesMetrics();
         });
 
         let currentSortMode = 'region';
@@ -1043,6 +1261,8 @@
                 renderMetrics();
                 renderCompletionMetrics();
                 renderTeachersMetrics();
+                renderSchoolsMetrics();
+                renderAmenitiesMetrics();
             });
         });
 
@@ -1174,6 +1394,8 @@
                 teachersData = rawData.filter(r => r.district === 'All Districts' && r.sex === 'both');
                 statusText.textContent = 'Data current as of ' + latestTeachersDate();
                 renderTeachersMetrics();
+                renderSchoolsMetrics();
+                renderAmenitiesMetrics();
             } catch (error) {
                 console.error('Teachers data fetch error:', error);
                 statusText.textContent = 'Could not load teacher data: ' + error.message;
@@ -1278,6 +1500,236 @@
 
         loadCompletionData();
         loadTeachersData();
+        loadSchoolsData();
+        loadAmenitiesData();
+
+        // ===== File 04a: School capacity =====
+        let schoolsData = [];
+
+        async function loadSchoolsData() {
+            const statusText = document.getElementById('schools-status');
+            const url = 'https://api.data.gov.my/data-catalogue?id=schools_district';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok, status ' + response.status);
+                const rawData = await response.json();
+                console.log('SCHOOLS DATA — total rows:', rawData.length);
+                console.log('SCHOOLS DATA — sample row:', rawData[0]);
+                schoolsData = rawData.filter(r => r.district === 'All Districts');
+                statusText.textContent = 'Data current as of ' + latestSchoolsDate();
+                renderSchoolsMetrics();
+            } catch (error) {
+                console.error('Schools data fetch error:', error);
+                statusText.textContent = 'Could not load school data: ' + error.message;
+            }
+        }
+
+        function latestSchoolsDate() {
+            const dates = schoolsData.map(r => r.date).sort();
+            return dates.length ? dates[dates.length - 1] : 'unknown';
+        }
+
+        function latestSchoolsFor(stateName, stage) {
+            const rows = schoolsData.filter(r => r.state === stateName && r.stage === stage);
+            if (!rows.length) return null;
+            return rows.reduce((a, b) => (a.date > b.date ? a : b));
+        }
+
+        function renderSchoolsMetrics() {
+            const selectedState = document.getElementById('state-selector').value;
+
+            if (selectedState === 'All States') {
+                document.getElementById('schools-metrics-grid').style.display = 'none';
+                document.getElementById('schools-table-wrap').style.display = 'block';
+                renderAllStatesSchoolsTable();
+                return;
+            }
+
+            document.getElementById('schools-metrics-grid').style.display = 'grid';
+            document.getElementById('schools-table-wrap').style.display = 'none';
+
+            const compareOn = document.getElementById('compare-toggle').checked;
+            const primary = latestSchoolsFor(selectedState, 'primary');
+            const secondary = latestSchoolsFor(selectedState, 'secondary');
+            const tertiary = latestSchoolsFor(selectedState, 'tertiary');
+
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById('schools-state-label-' + i).textContent = selectedState;
+            }
+            document.getElementById('primary-schools-state').textContent = formatNum(primary?.schools);
+            document.getElementById('secondary-schools-state').textContent = formatNum(secondary?.schools);
+            document.getElementById('tertiary-schools-state').textContent = formatNum(tertiary?.schools);
+
+            const showCompare = compareOn && selectedState !== 'Malaysia';
+            ['primary-schools-national-row', 'secondary-schools-national-row', 'tertiary-schools-national-row']
+                .forEach(id => document.getElementById(id).style.display = showCompare ? 'flex' : 'none');
+
+            if (showCompare) {
+                document.getElementById('primary-schools-national').textContent = formatNum(latestSchoolsFor('Malaysia', 'primary')?.schools);
+                document.getElementById('secondary-schools-national').textContent = formatNum(latestSchoolsFor('Malaysia', 'secondary')?.schools);
+                document.getElementById('tertiary-schools-national').textContent = formatNum(latestSchoolsFor('Malaysia', 'tertiary')?.schools);
+            }
+        }
+
+        function renderAllStatesSchoolsTable() {
+            const tbody = document.getElementById('schools-table-body');
+            tbody.innerHTML = '';
+            const states = Object.keys(STATE_REGIONS);
+
+            const renderRow = (state) => {
+                const primary = latestSchoolsFor(state, 'primary');
+                const secondary = latestSchoolsFor(state, 'secondary');
+                const tertiary = latestSchoolsFor(state, 'tertiary');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+               <td>${state}</td>
+               <td>${STATE_REGIONS[state]}</td>
+               <td class="num">${formatNum(primary?.schools)}</td>
+               <td class="num">${formatNum(secondary?.schools)}</td>
+               <td class="num">${formatNum(tertiary?.schools)}</td>
+           `;
+                return tr;
+            };
+
+            if (currentSortMode === 'alpha') {
+                states.sort((a, b) => a.localeCompare(b)).forEach(state => tbody.appendChild(renderRow(state)));
+            } else {
+                REGION_ORDER.forEach(region => {
+                    const headerRow = document.createElement('tr');
+                    headerRow.className = 'region-header';
+                    headerRow.innerHTML = `<td colspan="5">${region}</td>`;
+                    tbody.appendChild(headerRow);
+                    states.filter(s => STATE_REGIONS[s] === region)
+                        .sort((a, b) => a.localeCompare(b))
+                        .forEach(state => tbody.appendChild(renderRow(state)));
+                });
+            }
+        }
+
+        // ===== File 04b: Household amenities access =====
+        let amenitiesData = [];
+
+        async function loadAmenitiesData() {
+            const statusText = document.getElementById('amenities-status');
+            const url = 'https://api.data.gov.my/data-catalogue?id=hh_access_amenities';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok, status ' + response.status);
+                const rawData = await response.json();
+                console.log('AMENITIES DATA — total rows:', rawData.length);
+                console.log('AMENITIES DATA — sample row:', rawData[0]);
+                amenitiesData = rawData.filter(r => r.district === 'All Districts');
+                statusText.textContent = 'Data current as of ' + latestAmenitiesDate();
+                renderAmenitiesMetrics();
+            } catch (error) {
+                console.error('Amenities data fetch error:', error);
+                statusText.textContent = 'Could not load household access data: ' + error.message;
+            }
+        }
+
+        function latestAmenitiesDate() {
+            const dates = amenitiesData.map(r => r.date).sort();
+            return dates.length ? dates[dates.length - 1] : 'unknown';
+        }
+
+        function latestAmenitiesFor(stateName) {
+            const rows = amenitiesData.filter(r => r.state === stateName);
+            if (!rows.length) return null;
+            return rows.reduce((a, b) => (a.date > b.date ? a : b));
+        }
+
+        function parseAmenityValue(v) {
+            if (v === null || v === undefined || v === '') return null;
+            const n = parseFloat(v);
+            return isNaN(n) ? null : n;
+        }
+
+        function computeAmenityAverage(field) {
+            const values = Object.keys(STATE_REGIONS)
+                .map(state => parseAmenityValue(latestAmenitiesFor(state)?.[field]))
+                .filter(v => v !== null);
+            if (!values.length) return null;
+            return values.reduce((a, b) => a + b, 0) / values.length;
+        }
+
+        function renderAmenitiesMetrics() {
+            const selectedState = document.getElementById('state-selector').value;
+
+            if (selectedState === 'All States') {
+                document.getElementById('amenities-metrics-grid').style.display = 'none';
+                document.getElementById('amenities-table-wrap').style.display = 'block';
+                renderAllStatesAmenitiesTable();
+                return;
+            }
+
+            document.getElementById('amenities-metrics-grid').style.display = 'grid';
+            document.getElementById('amenities-table-wrap').style.display = 'none';
+
+            const compareOn = document.getElementById('compare-toggle').checked;
+
+            if (selectedState === 'Malaysia') {
+                // No real national row exists for this dataset — show the computed average directly.
+                for (let i = 1; i <= 3; i++) {
+                    document.getElementById('amenities-state-label-' + i).textContent = 'Avg. across states';
+                }
+                document.getElementById('piped-water-state').textContent = formatRate(computeAmenityAverage('piped_water'));
+                document.getElementById('sanitation-state').textContent = formatRate(computeAmenityAverage('sanitation'));
+                document.getElementById('electricity-state').textContent = formatRate(computeAmenityAverage('electricity'));
+                ['piped-water-national-row', 'sanitation-national-row', 'electricity-national-row']
+                    .forEach(id => document.getElementById(id).style.display = 'none');
+                return;
+            }
+
+            const row = latestAmenitiesFor(selectedState);
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById('amenities-state-label-' + i).textContent = selectedState;
+            }
+            document.getElementById('piped-water-state').textContent = formatRate(parseAmenityValue(row?.piped_water));
+            document.getElementById('sanitation-state').textContent = formatRate(parseAmenityValue(row?.sanitation));
+            document.getElementById('electricity-state').textContent = formatRate(parseAmenityValue(row?.electricity));
+
+            ['piped-water-national-row', 'sanitation-national-row', 'electricity-national-row']
+                .forEach(id => document.getElementById(id).style.display = compareOn ? 'flex' : 'none');
+
+            if (compareOn) {
+                document.getElementById('piped-water-national').textContent = formatRate(computeAmenityAverage('piped_water'));
+                document.getElementById('sanitation-national').textContent = formatRate(computeAmenityAverage('sanitation'));
+                document.getElementById('electricity-national').textContent = formatRate(computeAmenityAverage('electricity'));
+            }
+        }
+
+        function renderAllStatesAmenitiesTable() {
+            const tbody = document.getElementById('amenities-table-body');
+            tbody.innerHTML = '';
+            const states = Object.keys(STATE_REGIONS);
+
+            const renderRow = (state) => {
+                const row = latestAmenitiesFor(state);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+               <td>${state}</td>
+               <td>${STATE_REGIONS[state]}</td>
+               <td class="num">${formatRate(parseAmenityValue(row?.piped_water))}</td>
+               <td class="num">${formatRate(parseAmenityValue(row?.sanitation))}</td>
+               <td class="num">${formatRate(parseAmenityValue(row?.electricity))}</td>
+           `;
+                return tr;
+            };
+
+            if (currentSortMode === 'alpha') {
+                states.sort((a, b) => a.localeCompare(b)).forEach(state => tbody.appendChild(renderRow(state)));
+            } else {
+                REGION_ORDER.forEach(region => {
+                    const headerRow = document.createElement('tr');
+                    headerRow.className = 'region-header';
+                    headerRow.innerHTML = `<td colspan="5">${region}</td>`;
+                    tbody.appendChild(headerRow);
+                    states.filter(s => STATE_REGIONS[s] === region)
+                        .sort((a, b) => a.localeCompare(b))
+                        .forEach(state => tbody.appendChild(renderRow(state)));
+                });
+            }
+        }
     </script>
 
 </body>
