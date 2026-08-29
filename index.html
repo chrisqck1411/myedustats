@@ -594,21 +594,75 @@
             </div>
 
             <!-- File 02 Placeholder -->
+            <!-- File 02: Outcomes & Attainment -->
             <div class="sheet" id="p2">
+                <div class="stamp">
+                    <span class="stamp-inner">
+                        <span class="stamp-top">BETA</span>
+                        <span class="stamp-divider"></span>
+                        <span class="stamp-bottom">TESTING<br>IN PROGRESS</span>
+                    </span>
+                </div>
                 <p class="cat-eyebrow">File 02 · Outcomes &amp; attainment</p>
-                <h2 class="cat-title">School Completion Rates</h2>
+                <h2 class="cat-title" id="display-title-2">School Completion Rates</h2>
                 <div class="cat-info">
                     <p class="info-label">About this data</p>
-                    <p>This will show what share of students actually finish primary, lower secondary,
+                    <p>This shows what share of students actually finish primary, lower secondary,
                         and upper secondary school, at national and state level. Completion rates matter
                         more than enrollment alone, since they capture where students leave the system
-                        rather than just how many started.</p>
+                        rather than just how many started. Rates can occasionally exceed 100% due to
+                        grade repetition or students transferring between states.</p>
                 </div>
                 <p class="cat-source">Source: Ministry of Education Malaysia (EMIS), via OpenDOSM ·
                     <a href="https://open.dosm.gov.my/data-catalogue/completion_school_state" target="_blank">Browse or
                         download the raw dataset</a>
                 </p>
-                <p class="cat-desc">Work in progress — data coming soon.</p>
+                <p class="cat-desc" id="completion-status">Fetching data from OpenDOSM...</p>
+
+                <div class="metrics" id="completion-metrics-grid">
+                    <div class="metric">
+                        <p class="lbl">Primary completion</p>
+                        <div class="row"><span class="who" id="completion-state-label-1">—</span><span class="val"
+                                id="primary-completion-state">—</span></div>
+                        <div class="row" id="primary-completion-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim"
+                                id="primary-completion-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Lower secondary completion</p>
+                        <div class="row"><span class="who" id="completion-state-label-2">—</span><span class="val"
+                                id="lowersec-completion-state">—</span></div>
+                        <div class="row" id="lowersec-completion-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim"
+                                id="lowersec-completion-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Upper secondary completion</p>
+                        <div class="row"><span class="who" id="completion-state-label-3">—</span><span class="val"
+                                id="uppersec-completion-state">—</span></div>
+                        <div class="row" id="uppersec-completion-national-row" style="display:none;">
+                            <span class="who">Malaysia</span><span class="val dim"
+                                id="uppersec-completion-national">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="state-table-wrap" id="completion-table-wrap" style="display:none;">
+                    <table class="state-table" id="completion-table">
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>Region</th>
+                                <th>Primary</th>
+                                <th>Lower Sec.</th>
+                                <th>Upper Sec.</th>
+                            </tr>
+                        </thead>
+                        <tbody id="completion-table-body"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -780,15 +834,125 @@
                 displayTitle.innerText = `${selectedState} Enrollment`;
             }
             renderMetrics();
+            renderCompletionMetrics();
         });
 
         document.querySelectorAll('input[name="sort-mode"]').forEach(radio => {
-            radio.addEventListener('change', renderMetrics);
+            radio.addEventListener('change', () => { renderMetrics(); renderCompletionMetrics(); });
         });
 
-        compareToggle.addEventListener('change', renderMetrics);
+        compareToggle.addEventListener('change', () => { renderMetrics(); renderCompletionMetrics(); });
 
-        loadEnrolmentData();
+        // ===== File 02: Completion rates =====
+        let completionData = [];
+
+        async function loadCompletionData() {
+            const statusText = document.getElementById('completion-status');
+            const url = 'https://api.data.gov.my/data-catalogue?id=completion_school_state';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok, status ' + response.status);
+                const rawData = await response.json();
+                console.log('COMPLETION DATA — total rows:', rawData.length);
+                console.log('COMPLETION DATA — sample row:', rawData[0]);
+                completionData = rawData.filter(r => r.sex === 'both');
+                statusText.textContent = 'Data current as of ' + latestCompletionDate();
+                renderCompletionMetrics();
+            } catch (error) {
+                console.error('Completion data fetch error:', error);
+                statusText.textContent = 'Could not load completion data: ' + error.message;
+            }
+        }
+
+        function latestCompletionDate() {
+            const dates = completionData.map(r => r.date).sort();
+            return dates.length ? dates[dates.length - 1] : 'unknown';
+        }
+
+        function latestCompletionFor(stateName, stage) {
+            const rows = completionData.filter(r => r.state === stateName && r.stage === stage);
+            if (!rows.length) return null;
+            return rows.reduce((a, b) => (a.date > b.date ? a : b));
+        }
+
+        function formatRate(r) {
+            return r == null ? '—' : r.toFixed(1) + '%';
+        }
+
+        function renderCompletionMetrics() {
+            const selectedState = document.getElementById('state-selector').value;
+
+            if (selectedState === 'All States') {
+                document.getElementById('completion-metrics-grid').style.display = 'none';
+                document.getElementById('completion-table-wrap').style.display = 'block';
+                renderAllStatesCompletionTable();
+                return;
+            }
+
+            document.getElementById('completion-metrics-grid').style.display = 'grid';
+            document.getElementById('completion-table-wrap').style.display = 'none';
+
+            const compareOn = document.getElementById('compare-toggle').checked;
+            const primary = latestCompletionFor(selectedState, 'primary');
+            const lowerSec = latestCompletionFor(selectedState, 'secondary_lower');
+            const upperSec = latestCompletionFor(selectedState, 'secondary_upper');
+
+            document.getElementById('completion-state-label-1').textContent = selectedState;
+            document.getElementById('completion-state-label-2').textContent = selectedState;
+            document.getElementById('completion-state-label-3').textContent = selectedState;
+            document.getElementById('primary-completion-state').textContent = formatRate(primary?.completion);
+            document.getElementById('lowersec-completion-state').textContent = formatRate(lowerSec?.completion);
+            document.getElementById('uppersec-completion-state').textContent = formatRate(upperSec?.completion);
+
+            const showCompare = compareOn && selectedState !== 'Malaysia';
+            ['primary-completion-national-row', 'lowersec-completion-national-row', 'uppersec-completion-national-row']
+                .forEach(id => document.getElementById(id).style.display = showCompare ? 'flex' : 'none');
+
+            if (showCompare) {
+                document.getElementById('primary-completion-national').textContent = formatRate(latestCompletionFor('Malaysia', 'primary')?.completion);
+                document.getElementById('lowersec-completion-national').textContent = formatRate(latestCompletionFor('Malaysia', 'secondary_lower')?.completion);
+                document.getElementById('uppersec-completion-national').textContent = formatRate(latestCompletionFor('Malaysia', 'secondary_upper')?.completion);
+            }
+        }
+
+        function renderAllStatesCompletionTable() {
+            const sortMode = document.querySelector('input[name="sort-mode"]:checked').value;
+            const tbody = document.getElementById('completion-table-body');
+            tbody.innerHTML = '';
+
+            const states = Object.keys(STATE_REGIONS);
+
+            const renderRow = (state) => {
+                const primary = latestCompletionFor(state, 'primary');
+                const lowerSec = latestCompletionFor(state, 'secondary_lower');
+                const upperSec = latestCompletionFor(state, 'secondary_upper');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+               <td>${state}</td>
+               <td>${STATE_REGIONS[state]}</td>
+               <td class="num">${formatRate(primary?.completion)}</td>
+               <td class="num">${formatRate(lowerSec?.completion)}</td>
+               <td class="num">${formatRate(upperSec?.completion)}</td>
+           `;
+                return tr;
+            };
+
+            if (sortMode === 'alpha') {
+                states.sort((a, b) => a.localeCompare(b)).forEach(state => tbody.appendChild(renderRow(state)));
+            } else {
+                REGION_ORDER.forEach(region => {
+                    const headerRow = document.createElement('tr');
+                    headerRow.className = 'region-header';
+                    headerRow.innerHTML = `<td colspan="5">${region}</td>`;
+                    tbody.appendChild(headerRow);
+                    states.filter(s => STATE_REGIONS[s] === region)
+                        .sort((a, b) => a.localeCompare(b))
+                        .forEach(state => tbody.appendChild(renderRow(state)));
+                });
+            }
+        }
+
+        loadCompletionData();
     </script>
 
 </body>
