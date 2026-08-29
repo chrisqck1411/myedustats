@@ -33,6 +33,12 @@
             --rust-500: #B85C2E;
             --rust-700: #8A3E1B;
             --rust-900: #5C280F;
+            --tab-inactive-bg: #E4DEC9;
+            --plum-50: #F1E7EF;
+            --plum-200: #C79ABF;
+            --plum-500: #8A4A80;
+            --plum-700: #5F3057;
+            --plum-900: #3D1E38;
             --accent-50: var(--blue-50);
             --accent-200: var(--blue-200);
             --accent-500: var(--blue-500);
@@ -196,8 +202,8 @@
             font-weight: 500;
             font-size: 14.5px;
             line-height: 1.25;
-            color: var(--paper);
-            background: var(--accent-700);
+            color: var(--accent-700);
+            background: var(--tab-inactive-bg);
             border: none;
             padding: 13px 18px 11px;
             border-radius: 8px 8px 0 0;
@@ -225,16 +231,16 @@
         }
 
         .tab.active {
-            background: var(--accent-50);
-            color: var(--accent-900);
+            background: var(--accent-900);
+            color: var(--paper);
             top: 0;
             font-weight: 600;
             z-index: 5;
         }
 
         .tab.active .num {
-            opacity: .6;
-            color: var(--accent-700);
+            opacity: .75;
+            color: var(--paper);
         }
 
         .folder {
@@ -542,6 +548,14 @@
             --accent-700: var(--rust-700);
             --accent-900: var(--rust-900);
         }
+
+        .theme-plum {
+            --accent-50: var(--plum-50);
+            --accent-200: var(--plum-200);
+            --accent-500: var(--plum-500);
+            --accent-700: var(--plum-700);
+            --accent-900: var(--plum-900);
+        }
     </style>
 </head>
 
@@ -587,14 +601,17 @@
             </div>
 
             <div class="tabbar" id="tabbar">
-                <button class="tab active" data-theme="theme-blue" data-panel="p1">
+                <button class="tab theme-blue active" data-theme="theme-blue" data-panel="p1">
                     <span class="num">FILE 01</span>Access &amp; enrollment
                 </button>
-                <button class="tab" data-theme="theme-green" data-panel="p2">
+                <button class="tab theme-green" data-theme="theme-green" data-panel="p2">
                     <span class="num">FILE 02</span>Outcomes &amp; attainment
                 </button>
-                <button class="tab" data-theme="theme-rust" data-panel="p3">
+                <button class="tab theme-rust" data-theme="theme-rust" data-panel="p3">
                     <span class="num">FILE 03</span>Teaching resources
+                </button>
+                <button class="tab theme-plum" data-theme="theme-plum" data-panel="p4">
+                    <span class="num">FILE 04</span>Infrastructure &amp; equity
                 </button>
             </div>
         </div>
@@ -823,6 +840,24 @@
                         <tbody id="teachers-table-body"></tbody>
                     </table>
                 </div>
+            </div>
+            <!-- File 04: Infrastructure & Equity -->
+            <div class="sheet" id="p4">
+                <div class="stamp">
+                    <span class="stamp-inner">
+                        <span class="stamp-top">BETA</span>
+                        <span class="stamp-divider"></span>
+                        <span class="stamp-bottom">TESTING<br>IN PROGRESS</span>
+                    </span>
+                </div>
+                <p class="cat-eyebrow">File 04 · Infrastructure &amp; equity</p>
+                <h2 class="cat-title">Coming soon</h2>
+                <div class="cat-info">
+                    <p class="info-label">About this data</p>
+                    <p>This will cover school infrastructure and the rural/urban gap within states —
+                        school counts by district, and where the data allows, internet and device access.</p>
+                </div>
+                <p class="cat-desc">Work in progress — data coming soon.</p>
             </div>
         </div>
     </div>
