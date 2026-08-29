@@ -54,6 +54,39 @@
             position: relative;
         }
 
+        .merdeka-badge {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 4px 14px rgba(43, 38, 32, 0.18);
+            padding: 28px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .merdeka-badge img {
+            height: 56px;
+            width: auto;
+            display: block;
+        }
+
+        @media (max-width: 640px) {
+            .merdeka-badge {
+                position: static;
+                margin: 0 0 20px;
+                padding: 16px;
+                display: inline-flex;
+            }
+
+            .merdeka-badge img {
+                height: 40px;
+            }
+        }
+
         .eyebrow {
             font-family: 'IBM Plex Mono', monospace;
             font-size: 12px;
@@ -395,6 +428,11 @@
 <body>
 
     <div class="wrap">
+
+        <div class="merdeka-badge">
+            <img src="assets/merdeka-2026-logo.png" alt="Logo Malaysia MADANI - Hari Kebangsaan dan Hari Malaysia 2026">
+        </div>
+
         <p class="eyebrow">A public reference file — no login, no paywall</p>
         <h1 class="title">MyEdu<span>Stats</span></h1>
 
