@@ -205,7 +205,7 @@
             background: var(--paper);
             border: 1px solid var(--rule);
             border-radius: 2px;
-            box-shadow: 0 1px 0 var(--paper-edge), 3px 5px 0 -1px var(--paper-edge), 6px 10px 0 -2px #ded1ab, 0 18px 28px -14px rgba(43, 38, 32, .35);
+            box-shadow: 0 18px 28px -14px rgba(43, 38, 32, .35);
             position: relative;
             z-index: 2;
         }
@@ -394,7 +394,7 @@
         }
 
         .state-table {
-            width: 100%;
+            width: auto;
             min-width: 460px;
             border-collapse: collapse;
             font-size: 13.5px;
@@ -403,11 +403,11 @@
 
         .state-table th {
             text-align: left;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 10.5px;
-            letter-spacing: .08em;
-            color: var(--ink-soft);
-            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            font-size: 13.5px;
+            letter-spacing: normal;
+            color: var(--ink);
+            font-weight: 700;
             padding: 0 10px 8px 0;
             border-bottom: 1.5px solid var(--accent-500);
         }
@@ -424,9 +424,7 @@
             padding-right: 8px;
         }
 
-        #completion-table {
-            min-width: 520px;
-        }
+        #completion-table {}
 
         .state-table tr.region-header td {
             font-family: 'IBM Plex Mono', monospace;
@@ -602,10 +600,10 @@
                 <div class="state-table-wrap" id="state-table-wrap" style="display:none;">
                     <table class="state-table" id="state-table">
                         <colgroup>
-                            <col style="width: 30%;">
-                            <col style="width: 22%;">
-                            <col style="width: 24%;">
-                            <col style="width: 24%;">
+                            <col style="width: 170px;">
+                            <col style="width: 130px;">
+                            <col style="width: 160px;">
+                            <col style="width: 160px;">
                         </colgroup>
                         <thead>
                             <tr>
@@ -679,11 +677,11 @@
                 <div class="state-table-wrap" id="completion-table-wrap" style="display:none;">
                     <table class="state-table" id="completion-table">
                         <colgroup>
-                            <col style="width: 24%;">
-                            <col style="width: 18%;">
-                            <col style="width: 19.33%;">
-                            <col style="width: 19.33%;">
-                            <col style="width: 19.34%;">
+                            <col style="width: 170px;">
+                            <col style="width: 130px;">
+                            <col style="width: 110px;">
+                            <col style="width: 90px;">
+                            <col style="width: 90px;">
                         </colgroup>
                         <thead>
                             <tr>
