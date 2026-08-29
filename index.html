@@ -388,6 +388,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 13.5px;
+            table-layout: fixed;
         }
 
         .state-table th {
@@ -409,6 +410,8 @@
         .state-table td.num {
             font-family: 'IBM Plex Mono', monospace;
             text-align: right;
+            font-variant-numeric: tabular-nums;
+            padding-right: 24px;
         }
 
         .state-table tr.region-header td {
@@ -580,6 +583,12 @@
                 </div>
                 <div class="state-table-wrap" id="state-table-wrap" style="display:none;">
                     <table class="state-table" id="state-table">
+                        <colgroup>
+                            <col style="width: 30%;">
+                            <col style="width: 22%;">
+                            <col style="width: 24%;">
+                            <col style="width: 24%;">
+                        </colgroup>
                         <thead>
                             <tr>
                                 <th>State</th>
@@ -650,7 +659,14 @@
                 </div>
 
                 <div class="state-table-wrap" id="completion-table-wrap" style="display:none;">
-                    <table class="state-table" id="completion-table">
+                    <<table class="state-table" id="completion-table">
+                        <colgroup>
+                            <col style="width: 24%;">
+                            <col style="width: 18%;">
+                            <col style="width: 19.33%;">
+                            <col style="width: 19.33%;">
+                            <col style="width: 19.34%;">
+                        </colgroup>
                         <thead>
                             <tr>
                                 <th>State</th>
@@ -661,7 +677,7 @@
                             </tr>
                         </thead>
                         <tbody id="completion-table-body"></tbody>
-                    </table>
+                        </table>
                 </div>
             </div>
         </div>
