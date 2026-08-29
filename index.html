@@ -566,14 +566,26 @@
         /* Responsive Mobile Adjustments */
         @media (max-width:768px) {
             .tabbar {
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
                 gap: 4px;
                 align-items: stretch;
+                scrollbar-width: none;
+                padding-bottom: 2px;
+                margin: 0 -24px;
+                padding-left: 24px;
+                padding-right: 24px;
+            }
+
+            .tabbar::-webkit-scrollbar {
+                display: none;
             }
 
             .tab {
                 max-width: none;
-                flex: 1 1 30%;
+                flex: 0 0 auto;
+                width: 128px;
                 font-size: 13px;
                 padding: 10px 12px 8px;
                 top: 0 !important;
