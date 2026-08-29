@@ -45,13 +45,13 @@
             background-image: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02) 0px, rgba(0, 0, 0, 0.02) 1px, transparent 1px, transparent 3px);
             font-family: 'Inter', sans-serif;
             color: var(--ink);
-            padding: 48px 24px 80px;
         }
 
         .wrap {
             max-width: 1040px;
             margin: 0 auto;
             position: relative;
+            padding: 48px 24px 80px;
         }
 
         .page-header {
@@ -63,7 +63,21 @@
             margin-bottom: 22px;
         }
 
-        .merdeka-badge {
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+
+        .header-left {
+            flex: 1 1 auto;
+            min-width: 260px;
+        }
+
+        .merdeka-badge-desktop {
             background: #FFFFFF;
             border-radius: 8px;
             box-shadow: 0 4px 14px rgba(43, 38, 32, 0.18);
@@ -74,23 +88,34 @@
             flex-shrink: 0;
         }
 
-        .merdeka-badge img {
+        .merdeka-badge-desktop img {
             height: 48px;
             width: auto;
             display: block;
         }
 
+        .merdeka-banner-mobile {
+            display: none;
+        }
+
         @media (max-width: 640px) {
-            .page-header {
-                flex-direction: column-reverse;
+            .merdeka-badge-desktop {
+                display: none;
             }
 
-            .merdeka-badge {
-                padding: 14px;
+            .merdeka-banner-mobile {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background: #FFFFFF;
+                padding: 14px 0;
+                box-shadow: 0 2px 10px rgba(43, 38, 32, 0.15);
             }
 
-            .merdeka-badge img {
-                height: 36px;
+            .merdeka-banner-mobile img {
+                height: 40px;
+                width: auto;
+                display: block;
             }
         }
 
@@ -434,58 +459,60 @@
 
 <body>
 
+    <div class="merdeka-banner-mobile">
+        <img src="assets/merdeka-2026-logo.png" alt="Logo Malaysia MADANI - Hari Kebangsaan dan Hari Malaysia 2026">
+    </div>
+
     <div class="wrap">
         <div class="page-header">
-            <div>
+            <div class="header-left">
                 <p class="eyebrow">A public reference file — no login, no paywall</p>
                 <h1 class="title">MyEdu<span>Stats</span></h1>
+
+                <div class="context-bar">
+                    <select id="state-selector">
+                        <option value="Malaysia">Malaysia (National Overview)</option>
+                        <option value="All States">All States (compare)</option>
+                        <option value="Johor">Johor</option>
+                        <option value="Kedah">Kedah</option>
+                        <option value="Kelantan">Kelantan</option>
+                        <option value="Melaka">Melaka</option>
+                        <option value="Negeri Sembilan">Negeri Sembilan</option>
+                        <option value="Pahang">Pahang</option>
+                        <option value="Perak">Perak</option>
+                        <option value="Perlis">Perlis</option>
+                        <option value="Pulau Pinang">Pulau Pinang</option>
+                        <option value="Sabah">Sabah</option>
+                        <option value="Sarawak">Sarawak</option>
+                        <option value="Selangor">Selangor</option>
+                        <option value="Terengganu">Terengganu</option>
+                        <option value="W.P. Kuala Lumpur">W.P. Kuala Lumpur</option>
+                        <option value="W.P. Labuan">W.P. Labuan</option>
+                        <option value="W.P. Putrajaya">W.P. Putrajaya</option>
+                    </select>
+
+                    <label class="toggle-container" id="compare-toggle-container">
+                        <input type="checkbox" id="compare-toggle">
+                        <span class="slider"></span>
+                        Compare with National Average
+                    </label>
+
+                    <div class="toggle-container" id="sort-control-container" style="display:none; gap:12px;">
+                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                            <input type="radio" name="sort-mode" value="alpha" checked> Alphabetical
+                        </label>
+                        <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                            <input type="radio" name="sort-mode" value="region"> By region
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="merdeka-badge">
+
+            <div class="merdeka-badge-desktop">
                 <img src="assets/merdeka-2026-logo.png"
                     alt="Logo Malaysia MADANI - Hari Kebangsaan dan Hari Malaysia 2026">
             </div>
         </div>
-
-        <!-- Context Bar for State/National Selection -->
-        <div class="context-bar">
-            <select id="state-selector">
-                <option value="Malaysia">Malaysia (National Overview)</option>
-                <option value="All States">All States (compare)</option>
-                <option value="Johor">Johor</option>
-                <option value="Kedah">Kedah</option>
-                <option value="Kelantan">Kelantan</option>
-                <option value="Melaka">Melaka</option>
-                <option value="Negeri Sembilan">Negeri Sembilan</option>
-                <option value="Pahang">Pahang</option>
-                <option value="Perak">Perak</option>
-                <option value="Perlis">Perlis</option>
-                <option value="Pulau Pinang">Pulau Pinang</option>
-                <option value="Sabah">Sabah</option>
-                <option value="Sarawak">Sarawak</option>
-                <option value="Selangor">Selangor</option>
-                <option value="Terengganu">Terengganu</option>
-                <option value="W.P. Kuala Lumpur">W.P. Kuala Lumpur</option>
-                <option value="W.P. Labuan">W.P. Labuan</option>
-                <option value="W.P. Putrajaya">W.P. Putrajaya</option>
-            </select>
-
-            <label class="toggle-container" id="compare-toggle-container">
-                <input type="checkbox" id="compare-toggle">
-                <span class="slider"></span>
-                Compare with National Average
-            </label>
-
-            <div class="toggle-container" id="sort-control-container" style="display:none; gap:12px;">
-                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-                    <input type="radio" name="sort-mode" value="alpha" checked> Alphabetical
-                </label>
-                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-                    <input type="radio" name="sort-mode" value="region"> By region
-                </label>
-            </div>
-
-        </div>
-
         <div class="tabbar" id="tabbar">
             <button class="tab active" data-theme="theme-blue" data-panel="p1"><span class="num">FILE 01</span>Access
                 &amp; enrollment</button>
