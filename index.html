@@ -386,6 +386,7 @@
 
         .state-table {
             width: 100%;
+            min-width: 640px;
             border-collapse: collapse;
             font-size: 13.5px;
             table-layout: fixed;
@@ -659,7 +660,7 @@
                 </div>
 
                 <div class="state-table-wrap" id="completion-table-wrap" style="display:none;">
-                    <<table class="state-table" id="completion-table">
+                    <table class="state-table" id="completion-table">
                         <colgroup>
                             <col style="width: 24%;">
                             <col style="width: 18%;">
@@ -677,7 +678,7 @@
                             </tr>
                         </thead>
                         <tbody id="completion-table-body"></tbody>
-                        </table>
+                    </table>
                 </div>
             </div>
         </div>
@@ -968,6 +969,7 @@
             }
         }
 
+        loadEnrolmentData();
         loadCompletionData();
     </script>
 
