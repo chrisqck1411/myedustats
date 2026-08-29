@@ -39,6 +39,11 @@
             --plum-500: #8A4A80;
             --plum-700: #5F3057;
             --plum-900: #3D1E38;
+            --gold-50: #FBF3D9;
+            --gold-200: #E8C766;
+            --gold-500: #B8952E;
+            --gold-700: #8A6E1B;
+            --gold-900: #5C4A0F;
             --accent-50: var(--blue-50);
             --accent-200: var(--blue-200);
             --accent-500: var(--blue-500);
@@ -654,6 +659,14 @@
             --accent-700: var(--plum-700);
             --accent-900: var(--plum-900);
         }
+
+        .theme-gold {
+            --accent-50: var(--gold-50);
+            --accent-200: var(--gold-200);
+            --accent-500: var(--gold-500);
+            --accent-700: var(--gold-700);
+            --accent-900: var(--gold-900);
+        }
     </style>
 </head>
 
@@ -710,6 +723,9 @@
                 </button>
                 <button class="tab theme-plum" data-theme="theme-plum" data-panel="p4">
                     <span class="num">FILE 04</span>Infrastructure &amp; equity
+                </button>
+                <button class="tab theme-gold" data-theme="theme-gold" data-panel="p5">
+                    <span class="num">FILE 05</span>Socioeconomic context
                 </button>
             </div>
         </div>
@@ -1087,6 +1103,145 @@
                     </table>
                 </div>
             </div>
+            <!-- File 05: Socioeconomic Context -->
+            <div class="sheet" id="p5">
+                <div class="stamp">
+                    <span class="stamp-inner">
+                        <span class="stamp-top">BETA</span>
+                        <span class="stamp-divider"></span>
+                        <span class="stamp-bottom">TESTING<br>IN PROGRESS</span>
+                    </span>
+                </div>
+                <p class="cat-eyebrow">File 05 · Socioeconomic context</p>
+                <h2 class="cat-title">Household Income &amp; Poverty</h2>
+                <div class="cat-info">
+                    <p class="info-label">About this data</p>
+                    <p>This shows household income and poverty rates by state — context that helps explain,
+                        rather than excuse, why some states show different results on the earlier tabs.</p>
+
+                    <div class="cat-caveat">
+                        <p class="cat-caveat-label"><span class="cat-caveat-icon">⚠️</span> Caveat</p>
+                        <ol>
+                            <li><span class="cat-caveat-text">Unlike the school datasets (which come from administrative
+                                    records updated regularly), income and poverty figures come from periodic household
+                                    surveys conducted roughly every 2–3 years — so the "latest" figure shown may be a
+                                    couple
+                                    of years old.</span></li>
+                            <li><span class="cat-caveat-text">This dataset has no official national figure — where you
+                                    see an "avg. across states," it's an unweighted average we calculated ourselves, not
+                                    an
+                                    official population-weighted national statistic.</span></li>
+                            <li><span class="cat-caveat-text">A state having lower income or higher poverty does not by
+                                    itself explain any education outcome shown elsewhere on this site. Treat this as
+                                    background context, not a proven cause.</span></li>
+                        </ol>
+                    </div>
+                </div>
+                <p class="cat-source">Source: Department of Statistics Malaysia (DOSM), via OpenDOSM ·
+                    <a href="https://open.dosm.gov.my/data-catalogue/hh_income_state" target="_blank">Income dataset</a>
+                    ·
+                    <a href="https://open.dosm.gov.my/data-catalogue/hh_poverty_state" target="_blank">Poverty
+                        dataset</a>
+                </p>
+
+                <h3 class="subsection-title">Household Income</h3>
+                <p class="cat-desc" id="income-status">Fetching data from OpenDOSM...</p>
+
+                <div class="metrics" id="income-metrics-grid">
+                    <div class="metric">
+                        <p class="lbl">Median household income</p>
+                        <div class="row"><span class="who" id="income-state-label-1">—</span><span class="val"
+                                id="income-median-state">—</span></div>
+                        <div class="row" id="income-median-national-row" style="display:none;">
+                            <span class="who">Avg. states</span><span class="val dim"
+                                id="income-median-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Mean household income</p>
+                        <div class="row"><span class="who" id="income-state-label-2">—</span><span class="val"
+                                id="income-mean-state">—</span></div>
+                        <div class="row" id="income-mean-national-row" style="display:none;">
+                            <span class="who">Avg. states</span><span class="val dim" id="income-mean-national">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="state-table-wrap" id="income-table-wrap" style="display:none;">
+                    <table class="state-table" id="income-table">
+                        <colgroup>
+                            <col style="width: 170px;">
+                            <col style="width: 130px;">
+                            <col style="width: 130px;">
+                            <col style="width: 130px;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>Region</th>
+                                <th>Median Income</th>
+                                <th>Mean Income</th>
+                            </tr>
+                        </thead>
+                        <tbody id="income-table-body"></tbody>
+                    </table>
+                </div>
+
+                <h3 class="subsection-title">Poverty Rates</h3>
+                <p class="cat-desc" id="poverty-status">Fetching data from OpenDOSM...</p>
+
+                <div class="metrics" id="poverty-metrics-grid">
+                    <div class="metric">
+                        <p class="lbl">Absolute poverty</p>
+                        <div class="row"><span class="who" id="poverty-state-label-1">—</span><span class="val"
+                                id="poverty-absolute-state">—</span></div>
+                        <div class="row" id="poverty-absolute-national-row" style="display:none;">
+                            <span class="who">Avg. states</span><span class="val dim"
+                                id="poverty-absolute-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Hardcore poverty</p>
+                        <div class="row"><span class="who" id="poverty-state-label-2">—</span><span class="val"
+                                id="poverty-hardcore-state">—</span></div>
+                        <div class="row" id="poverty-hardcore-national-row" style="display:none;">
+                            <span class="who">Avg. states</span><span class="val dim"
+                                id="poverty-hardcore-national">—</span>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <p class="lbl">Relative poverty</p>
+                        <div class="row"><span class="who" id="poverty-state-label-3">—</span><span class="val"
+                                id="poverty-relative-state">—</span></div>
+                        <div class="row" id="poverty-relative-national-row" style="display:none;">
+                            <span class="who">Avg. states</span><span class="val dim"
+                                id="poverty-relative-national">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="state-table-wrap" id="poverty-table-wrap" style="display:none;">
+                    <table class="state-table" id="poverty-table">
+                        <colgroup>
+                            <col style="width: 170px;">
+                            <col style="width: 130px;">
+                            <col style="width: 90px;">
+                            <col style="width: 90px;">
+                            <col style="width: 90px;">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>State</th>
+                                <th>Region</th>
+                                <th>Absolute</th>
+                                <th>Hardcore</th>
+                                <th>Relative</th>
+                            </tr>
+                        </thead>
+                        <tbody id="poverty-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1261,6 +1416,8 @@
             renderTeachersMetrics();
             renderSchoolsMetrics();
             renderAmenitiesMetrics();
+            renderIncomeMetrics();
+            renderPovertyMetrics();
         });
 
         let currentSortMode = 'region';
@@ -1275,10 +1432,12 @@
                 renderTeachersMetrics();
                 renderSchoolsMetrics();
                 renderAmenitiesMetrics();
+                renderIncomeMetrics();
+                renderPovertyMetrics();
             });
         });
 
-        compareToggle.addEventListener('change', () => { renderMetrics(); renderCompletionMetrics(); renderTeachersMetrics(); });
+        compareToggle.addEventListener('change', () => { renderMetrics(); renderCompletionMetrics(); renderTeachersMetrics(); renderSchoolsMetrics(); renderAmenitiesMetrics(); renderIncomeMetrics(); renderPovertyMetrics(); });
 
         // ===== File 02: Completion rates =====
         let completionData = [];
@@ -1408,6 +1567,9 @@
                 renderTeachersMetrics();
                 renderSchoolsMetrics();
                 renderAmenitiesMetrics();
+                renderIncomeMetrics();
+                renderPovertyMetrics();
+
             } catch (error) {
                 console.error('Teachers data fetch error:', error);
                 statusText.textContent = 'Could not load teacher data: ' + error.message;
@@ -1514,6 +1676,9 @@
         loadTeachersData();
         loadSchoolsData();
         loadAmenitiesData();
+        loadIncomeData();
+        loadPovertyData();
+
 
         // ===== File 04a: School capacity =====
         let schoolsData = [];
@@ -1742,6 +1907,229 @@
                 });
             }
         }
+        // ===== File 05a: Household income =====
+        let incomeData = [];
+
+        async function loadIncomeData() {
+            const statusText = document.getElementById('income-status');
+            const url = 'https://api.data.gov.my/data-catalogue?id=hh_income_state';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok, status ' + response.status);
+                const rawData = await response.json();
+                console.log('INCOME DATA — total rows:', rawData.length);
+                console.log('INCOME DATA — sample row:', rawData[0]);
+                incomeData = rawData;
+                statusText.textContent = 'Data current as of ' + latestIncomeDate();
+                renderIncomeMetrics();
+            } catch (error) {
+                console.error('Income data fetch error:', error);
+                statusText.textContent = 'Could not load income data: ' + error.message;
+            }
+        }
+
+        function latestIncomeDate() {
+            const dates = incomeData.map(r => r.date).sort();
+            return dates.length ? dates[dates.length - 1] : 'unknown';
+        }
+
+        function latestIncomeFor(stateName) {
+            const rows = incomeData.filter(r => r.state === stateName);
+            if (!rows.length) return null;
+            return rows.reduce((a, b) => (a.date > b.date ? a : b));
+        }
+
+        function parseNumOrNull(v) {
+            if (v === null || v === undefined || v === '') return null;
+            const n = parseFloat(v);
+            return isNaN(n) ? null : n;
+        }
+
+        function formatCurrency(v) {
+            return v == null ? '—' : 'RM ' + Math.round(v).toLocaleString('en-MY');
+        }
+
+        function computeStateAverage(states, getValue) {
+            const values = states.map(getValue).filter(v => v !== null);
+            if (!values.length) return null;
+            return values.reduce((a, b) => a + b, 0) / values.length;
+        }
+
+        function renderIncomeMetrics() {
+            const selectedState = document.getElementById('state-selector').value;
+            const allStates = Object.keys(STATE_REGIONS);
+
+            if (selectedState === 'All States') {
+                document.getElementById('income-metrics-grid').style.display = 'none';
+                document.getElementById('income-table-wrap').style.display = 'block';
+                renderAllStatesIncomeTable();
+                return;
+            }
+
+            document.getElementById('income-metrics-grid').style.display = 'grid';
+            document.getElementById('income-table-wrap').style.display = 'none';
+
+            const compareOn = document.getElementById('compare-toggle').checked;
+
+            if (selectedState === 'Malaysia') {
+                document.getElementById('income-state-label-1').textContent = 'Avg. across states';
+                document.getElementById('income-state-label-2').textContent = 'Avg. across states';
+                document.getElementById('income-median-state').textContent = formatCurrency(computeStateAverage(allStates, s => parseNumOrNull(latestIncomeFor(s)?.income_median)));
+                document.getElementById('income-mean-state').textContent = formatCurrency(computeStateAverage(allStates, s => parseNumOrNull(latestIncomeFor(s)?.income_mean)));
+                document.getElementById('income-median-national-row').style.display = 'none';
+                document.getElementById('income-mean-national-row').style.display = 'none';
+                return;
+            }
+
+            const row = latestIncomeFor(selectedState);
+            document.getElementById('income-state-label-1').textContent = selectedState;
+            document.getElementById('income-state-label-2').textContent = selectedState;
+            document.getElementById('income-median-state').textContent = formatCurrency(parseNumOrNull(row?.income_median));
+            document.getElementById('income-mean-state').textContent = formatCurrency(parseNumOrNull(row?.income_mean));
+
+            document.getElementById('income-median-national-row').style.display = compareOn ? 'flex' : 'none';
+            document.getElementById('income-mean-national-row').style.display = compareOn ? 'flex' : 'none';
+
+            if (compareOn) {
+                document.getElementById('income-median-national').textContent = formatCurrency(computeStateAverage(allStates, s => parseNumOrNull(latestIncomeFor(s)?.income_median)));
+                document.getElementById('income-mean-national').textContent = formatCurrency(computeStateAverage(allStates, s => parseNumOrNull(latestIncomeFor(s)?.income_mean)));
+            }
+        }
+
+        function renderAllStatesIncomeTable() {
+            const tbody = document.getElementById('income-table-body');
+            tbody.innerHTML = '';
+            const states = Object.keys(STATE_REGIONS);
+
+            const renderRow = (state) => {
+                const row = latestIncomeFor(state);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+               <td>${state}</td>
+               <td>${STATE_REGIONS[state]}</td>
+               <td class="num">${formatCurrency(parseNumOrNull(row?.income_median))}</td>
+               <td class="num">${formatCurrency(parseNumOrNull(row?.income_mean))}</td>
+           `;
+                return tr;
+            };
+
+            if (currentSortMode === 'alpha') {
+                states.sort((a, b) => a.localeCompare(b)).forEach(state => tbody.appendChild(renderRow(state)));
+            } else {
+                REGION_ORDER.forEach(region => {
+                    const headerRow = document.createElement('tr');
+                    headerRow.className = 'region-header';
+                    headerRow.innerHTML = `<td colspan="4">${region}</td>`;
+                    tbody.appendChild(headerRow);
+                    states.filter(s => STATE_REGIONS[s] === region)
+                        .sort((a, b) => a.localeCompare(b))
+                        .forEach(state => tbody.appendChild(renderRow(state)));
+                });
+            }
+        }
+
+        // ===== File 05b: Poverty rates =====
+        let povertyData = [];
+
+        async function loadPovertyData() {
+            const statusText = document.getElementById('poverty-status');
+            const url = 'https://api.data.gov.my/data-catalogue?id=hh_poverty_state';
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok, status ' + response.status);
+                const rawData = await response.json();
+                console.log('POVERTY DATA — total rows:', rawData.length);
+                console.log('POVERTY DATA — sample row:', rawData[0]);
+                povertyData = rawData;
+                statusText.textContent = 'Data current as of ' + latestPovertyDate();
+                renderPovertyMetrics();
+            } catch (error) {
+                console.error('Poverty data fetch error:', error);
+                statusText.textContent = 'Could not load poverty data: ' + error.message;
+            }
+        }
+
+        function latestPovertyDate() {
+            const dates = povertyData.map(r => r.date).sort();
+            return dates.length ? dates[dates.length - 1] : 'unknown';
+        }
+
+        function latestPovertyFor(stateName) {
+            const rows = povertyData.filter(r => r.state === stateName);
+            if (!rows.length) return null;
+            return rows.reduce((a, b) => (a.date > b.date ? a : b));
+        }
+
+        function renderPovertyMetrics() {
+            const selectedState = document.getElementById('state-selector').value;
+            const allStates = Object.keys(STATE_REGIONS);
+            const fields = ['absolute', 'hardcore', 'relative'];
+
+            if (selectedState === 'All States') {
+                document.getElementById('poverty-metrics-grid').style.display = 'none';
+                document.getElementById('poverty-table-wrap').style.display = 'block';
+                renderAllStatesPovertyTable();
+                return;
+            }
+
+            document.getElementById('poverty-metrics-grid').style.display = 'grid';
+            document.getElementById('poverty-table-wrap').style.display = 'none';
+
+            const compareOn = document.getElementById('compare-toggle').checked;
+
+            if (selectedState === 'Malaysia') {
+                fields.forEach((f, i) => {
+                    document.getElementById('poverty-state-label-' + (i + 1)).textContent = 'Avg. across states';
+                    document.getElementById('poverty-' + f + '-state').textContent = formatRate(computeStateAverage(allStates, s => parseNumOrNull(latestPovertyFor(s)?.['poverty_' + f])));
+                    document.getElementById('poverty-' + f + '-national-row').style.display = 'none';
+                });
+                return;
+            }
+
+            const row = latestPovertyFor(selectedState);
+            fields.forEach((f, i) => {
+                document.getElementById('poverty-state-label-' + (i + 1)).textContent = selectedState;
+                document.getElementById('poverty-' + f + '-state').textContent = formatRate(parseNumOrNull(row?.['poverty_' + f]));
+                document.getElementById('poverty-' + f + '-national-row').style.display = compareOn ? 'flex' : 'none';
+                if (compareOn) {
+                    document.getElementById('poverty-' + f + '-national').textContent = formatRate(computeStateAverage(allStates, s => parseNumOrNull(latestPovertyFor(s)?.['poverty_' + f])));
+                }
+            });
+        }
+
+        function renderAllStatesPovertyTable() {
+            const tbody = document.getElementById('poverty-table-body');
+            tbody.innerHTML = '';
+            const states = Object.keys(STATE_REGIONS);
+
+            const renderRow = (state) => {
+                const row = latestPovertyFor(state);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+               <td>${state}</td>
+               <td>${STATE_REGIONS[state]}</td>
+               <td class="num">${formatRate(parseNumOrNull(row?.poverty_absolute))}</td>
+               <td class="num">${formatRate(parseNumOrNull(row?.poverty_hardcore))}</td>
+               <td class="num">${formatRate(parseNumOrNull(row?.poverty_relative))}</td>
+           `;
+                return tr;
+            };
+
+            if (currentSortMode === 'alpha') {
+                states.sort((a, b) => a.localeCompare(b)).forEach(state => tbody.appendChild(renderRow(state)));
+            } else {
+                REGION_ORDER.forEach(region => {
+                    const headerRow = document.createElement('tr');
+                    headerRow.className = 'region-header';
+                    headerRow.innerHTML = `<td colspan="5">${region}</td>`;
+                    tbody.appendChild(headerRow);
+                    states.filter(s => STATE_REGIONS[s] === region)
+                        .sort((a, b) => a.localeCompare(b))
+                        .forEach(state => tbody.appendChild(renderRow(state)));
+                });
+            }
+        }
+
     </script>
 
 </body>
